@@ -67,7 +67,7 @@ from homeassistant.components.natural_show.const import (
 from homeassistant.components.natural_show.switch import (
     CONF_INTERCEPT,
     NaturalShowManager,
-    AdaptiveSwitch,
+    NaturalShowSwitch,
     SimpleSwitch,
     _attributes_have_changed,
     color_difference_redmean,
@@ -179,7 +179,7 @@ async def cleanup(hass):
         task.cancel()
 
 
-async def setup_switch(hass, extra_data) -> tuple[MockConfigEntry, AdaptiveSwitch]:
+async def setup_switch(hass, extra_data) -> tuple[MockConfigEntry, NaturalShowSwitch]:
     """Create the switch entry."""
     entry = MockConfigEntry(
         domain=DOMAIN,
@@ -265,7 +265,7 @@ async def setup_lights_and_switch(
     hass,
     extra_conf=None,
     all_lights: bool = False,
-) -> tuple[AdaptiveSwitch, list[LightTemplate]]:
+) -> tuple[NaturalShowSwitch, list[LightTemplate]]:
     """Create switch and demo lights."""
     # Setup demo lights and turn on
     lights_instances = await setup_lights(hass)
@@ -1780,7 +1780,7 @@ async def _turn_on_and_track_event_contexts(
     return event_context_ids
 
 
-def _mock_sun_light_settings(switch: AdaptiveSwitch, settings: dict[str, Any]):
+def _mock_sun_light_settings(switch: NaturalShowSwitch, settings: dict[str, Any]):
     sun_light_settings_mock = Mock()
     sun_light_settings_mock.get_settings = Mock(return_value=settings)
     switch._sun_light_settings = sun_light_settings_mock
@@ -2487,7 +2487,7 @@ async def test_simple_switch_initial_state_not_none(hass):
     When an entity is disabled in Home Assistant, async_added_to_hass() is never
     called. Previously, SimpleSwitch._state was initialized to None and only set
     to True/False in async_added_to_hass(). This caused an infinite loop in
-    AdaptiveSwitch._setup_listeners() which waits for all SimpleSwitch._state
+    NaturalShowSwitch._setup_listeners() which waits for all SimpleSwitch._state
     to be not None.
 
     The fix is to initialize _state to the initial_state value in __init__.

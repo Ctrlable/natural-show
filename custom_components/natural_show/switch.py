@@ -225,11 +225,11 @@ def _switches_with_lights(
     hass: HomeAssistant,
     lights: list[str],
     expand_light_groups: bool = True,
-) -> AdaptiveSwitches:
+) -> NaturalShowSwitches:
     """Get all switches that control at least one of the lights passed."""
     config_entries = hass.config_entries.async_entries(DOMAIN)
     data = hass.data[DOMAIN]
-    switches: AdaptiveSwitches = []
+    switches: NaturalShowSwitches = []
     all_check_lights = (
         _expand_light_groups(hass, lights) if expand_light_groups else set(lights)
     )
@@ -253,7 +253,7 @@ def _switch_with_lights(
     hass: HomeAssistant,
     lights: list[str],
     expand_light_groups: bool = True,
-) -> AdaptiveSwitch:
+) -> NaturalShowSwitch:
     """Find the switch that controls the lights in 'lights'."""
     switches = _switches_with_lights(hass, lights, expand_light_groups)
     if len(switches) == 1:
@@ -282,7 +282,7 @@ def _switch_with_lights(
 def _switches_from_service_call(
     hass: HomeAssistant,
     service_call: ServiceCall,
-) -> AdaptiveSwitches:
+) -> NaturalShowSwitches:
     data = service_call.data
     lights = data[CONF_LIGHTS]
     switch_entity_ids: list[str] | None = data.get("entity_id")
@@ -304,7 +304,7 @@ def _switches_from_service_call(
                 f" Invalid service data received: {service_call.data}"
             )
             raise ValueError(msg)
-        switches: AdaptiveSwitches = []
+        switches: NaturalShowSwitches = []
         ent_reg = entity_registry.async_get(hass)
         for entity_id in switch_entity_ids:
             ent_entry = ent_reg.async_get(entity_id)
@@ -325,7 +325,7 @@ def _switches_from_service_call(
 
 
 async def handle_change_switch_settings(
-    switch: AdaptiveSwitch,
+    switch: NaturalShowSwitch,
     service_call: ServiceCall,
 ) -> None:
     """Allows HASS to change config values via a service call."""
@@ -412,7 +412,7 @@ async def async_setup_entry(  # noqa: PLR0915
         config_entry=config_entry,
         icon=ICON_BRIGHTNESS,
     )
-    switch = AdaptiveSwitch(
+    switch = NaturalShowSwitch(
         hass,
         config_entry,
         manager,
@@ -825,7 +825,7 @@ def _attributes_have_changed(
     return changed_attributes
 
 
-class AdaptiveSwitch(SwitchEntity, RestoreEntity):
+class NaturalShowSwitch(SwitchEntity, RestoreEntity):
     """Representation of a Natural Show switch."""
 
     def __init__(
@@ -990,7 +990,7 @@ class AdaptiveSwitch(SwitchEntity, RestoreEntity):
 
     @property
     def is_on(self) -> bool | None:
-        """Return true if adaptive lighting is on."""
+        """Return true if natural show is on."""
         return self._state
 
     @property
@@ -1147,7 +1147,7 @@ class AdaptiveSwitch(SwitchEntity, RestoreEntity):
         self,
         adapt_lights: bool = True,
     ) -> None:
-        """Turn on adaptive lighting."""
+        """Turn on natural show."""
         _LOGGER.debug(
             "%s: Called 'async_turn_on', current state is '%s'",
             self._name,
@@ -1166,7 +1166,7 @@ class AdaptiveSwitch(SwitchEntity, RestoreEntity):
             )
 
     async def async_turn_off(self, **kwargs: Any) -> None:  # noqa: ARG002
-        """Turn off adaptive lighting."""
+        """Turn off natural show."""
         if not self.is_on:
             return
         self._state = False
@@ -1648,7 +1648,7 @@ class SimpleSwitch(SwitchEntity, RestoreEntity):
 
     @property
     def is_on(self) -> bool | None:
-        """Return true if adaptive lighting is on."""
+        """Return true if natural show is on."""
         return self._state
 
     @property
@@ -1674,18 +1674,18 @@ class SimpleSwitch(SwitchEntity, RestoreEntity):
             await self.async_turn_off()
 
     async def async_turn_on(self, **kwargs: Any) -> None:  # noqa: ARG002
-        """Turn on adaptive lighting sleep mode."""
+        """Turn on natural show sleep mode."""
         _LOGGER.debug("%s: Turning on", self._name)
         self._state = True
 
     async def async_turn_off(self, **kwargs: Any) -> None:  # noqa: ARG002
-        """Turn off adaptive lighting sleep mode."""
+        """Turn off natural show sleep mode."""
         _LOGGER.debug("%s: Turning off", self._name)
         self._state = False
 
 
-type AdaptiveSwitches = list[AdaptiveSwitch]
-type AdaptiveSwitchMap = dict[AdaptiveSwitch, list[str]]
+type NaturalShowSwitches = list[NaturalShowSwitch]
+type NaturalShowSwitchMap = dict[NaturalShowSwitch, list[str]]
 
 
 class NaturalShowManager:
@@ -1822,10 +1822,10 @@ class NaturalShowManager:
         self,
         entity_ids: list[str],
         data: ServiceData,
-    ) -> tuple[AdaptiveSwitchMap, list[str]]:
+    ) -> tuple[NaturalShowSwitchMap, list[str]]:
         # Create a mapping from switch to entity IDs
-        # AdaptiveSwitch → entity_ids mapping
-        switch_to_eids: AdaptiveSwitchMap = {}
+        # NaturalShowSwitch → entity_ids mapping
+        switch_to_eids: NaturalShowSwitchMap = {}
         skipped: list[str] = []
         for entity_id in entity_ids:
             try:
@@ -1881,7 +1881,7 @@ class NaturalShowManager:
     def _correct_for_multi_light_intercept(
         self,
         entity_ids: list[str],
-        switch_to_eids: AdaptiveSwitchMap,
+        switch_to_eids: NaturalShowSwitchMap,
         skipped: list[str],
     ):
         # Check for `multi_light_intercept: true/false`
@@ -2066,7 +2066,7 @@ class NaturalShowManager:
     async def _service_interceptor_turn_on_single_light_handler(
         self,
         entity_ids: list[str],
-        switch: AdaptiveSwitch,
+        switch: NaturalShowSwitch,
         transition: int,
         call: ServiceCall,
         data: ServiceData,
@@ -2264,7 +2264,7 @@ class NaturalShowManager:
 
     def get_adaption_control_attributes(
         self,
-        switch: AdaptiveSwitch,
+        switch: NaturalShowSwitch,
         light: str,
     ) -> LightControlAttributes:
         """Get the attributes that should be adapted for a light.
@@ -2585,7 +2585,7 @@ class NaturalShowManager:
 
     async def update_manually_controlled_from_event(
         self,
-        switch: AdaptiveSwitch,
+        switch: NaturalShowSwitch,
         light: str,
         force: bool,
     ) -> None:
@@ -2626,7 +2626,7 @@ class NaturalShowManager:
 
     async def update_manually_controlled_from_untracked_change(
         self,
-        switch: AdaptiveSwitch,
+        switch: NaturalShowSwitch,
         light: str,
         force: bool,
         context: Context,
@@ -2658,7 +2658,7 @@ class NaturalShowManager:
 
     async def significant_change(
         self,
-        switch: AdaptiveSwitch,
+        switch: NaturalShowSwitch,
         light: str,
         context: Context,  # just for logging
     ) -> LightControlAttributes:

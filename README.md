@@ -1,12 +1,8 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/hacs/integration)
 ![Version](https://img.shields.io/github/v/release/Ctrlable/natural-show?style=for-the-badge)
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-134-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # 🌞 Natural Show: Enhance Your Home's Atmosphere with Smart, Sun-Synchronized Lighting 🌙
 
-<img src="https://raw.githubusercontent.com/home-assistant/brands/master/custom_integrations/natural_show/icon@2x.png" alt="logo" width="256px" height="256px" />
 
 [Natural Show](https://github.com/Ctrlable/natural-show) is a custom component for [Home Assistant](https://www.home-assistant.io/) that intelligently adjusts the brightness and color of your lights 💡 based on the sun's position, while still allowing for manual control.
 
@@ -49,7 +45,6 @@ In addition to its regular mode, Natural Show also offers a "sleep mode" 🌜 wh
 
 > 🌈 Visualize Natural Show's settings with the [_🌞 Natural Show Simulator WebApp 🌛_](https://ctrlable.github.io/natural-show)
 
-https://github.com/Ctrlable/natural-show/assets/6897215/68908f7d-fbf1-4991-98ce-3f2af6df996f
 
 [[ToC](#books-table-of-contents)]
 
@@ -107,8 +102,6 @@ The `natural_show.manual_control` event is fired when a light is marked as "manu
   - [While using `transition_until_sleep: true`](#while-using-transition_until_sleep-true)
   - [Custom brightness ramps using `brightness_mode` with `"linear"` and `"tanh"`](#custom-brightness-ramps-using-brightness_mode-with-linear-and-tanh)
 - [:eyes: See also](#eyes-see-also)
-- [:busts_in_silhouette: Contributors](#busts_in_silhouette-contributors)
-- [Translating Natural Show](#translating-natural-show)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -284,7 +277,7 @@ The following keys are disallowed:
 <summary>Reset the <code>manual_control</code> status of a light after an hour.</summary>
 
 ```yaml
-- alias: "Adaptive lighting: reset manual_control after 1 hour"
+- alias: "Natural Show: reset manual_control after 1 hour"
   mode: parallel
   trigger:
     platform: event
@@ -309,7 +302,7 @@ The following keys are disallowed:
 <summary>Toggle multiple Natural Show switches to "sleep mode" using an <code>input_boolean.sleep_mode</code>.</summary>
 
 ```yaml
-- alias: "Adaptive lighting: toggle 'sleep mode'"
+- alias: "Natural Show: toggle 'sleep mode'"
   trigger:
     - platform: state
       entity_id: input_boolean.sleep_mode
@@ -380,9 +373,7 @@ iphone_carly_wakeup:
 
 ## Additional Information
 
-For more details on adding the integration and setting options, refer to the [documentation of the PR](https://deploy-preview-14877--home-assistant-docs.netlify.app/integrations/natural_show/) and [this video tutorial on Reddit](https://www.reddit.com/r/homeassistant/comments/jabhso/ha_has_it_before_apple_has_even_finished_it_i/).
-
-Natural Show was initially inspired by @claytonjn's [hass-circadian\_lighting](https://github.com/claytonjn/hass-circadian_lighting), but has since been entirely rewritten and expanded with new features.
+For configuration details and service usage, see the [official documentation](https://github.com/Ctrlable/natural-show#readme).
 
 ## :sos: Troubleshooting
 
@@ -459,22 +450,6 @@ These lights are known to exhibit disadvantageous behaviour due to firmware bugs
   - Unresponsiveness during color transitions: No other commands are processed during an ongoing color transition, e.g., turn-off commands are ignored and lights stay on despite being reported as off to Home Assistant. The default config with long transitions thus results in long periods of unresponsiveness. To work around this, disable transitions by setting `transition` to `0`, and increase the adaptation frequency by setting `interval` to a short time, e.g., `15` seconds, to retain the impression of smooth continuous adaptations. Keeping the `initial_transition` is recommended for a smooth fade-in (lights are usually not turned off momentarily after being turned on, in which case a short period of unresponsiveness is tolerable).
 <!-- SECTION:common-problems:END -->
 
-<!-- SECTION:graphs:START -->
-## :bar_chart: Graphs!
-These graphs were generated using the values calculated by the Natural Show sensor/switch(es).
-
-### :sunny: Sun Position
-![cl_percent|690x131](https://community-home-assistant-assets.s3.dualstack.us-west-2.amazonaws.com/original/3X/6/5/657ff98beb65a94598edeb4bdfd939095db1a22c.PNG)
-
-### :thermometer: Color Temperature
-![cl_color_temp|690x129](https://community-home-assistant-assets.s3.dualstack.us-west-2.amazonaws.com/original/3X/5/9/59e84263cbecd8e428cb08777a0413672c48dfcd.PNG)
-
-### :high_brightness: Brightness
-![cl_brightness|690x130](https://community-home-assistant-assets.s3.dualstack.us-west-2.amazonaws.com/original/3X/5/8/58ebd994b62a8b1abfb3497a5288d923ff4e2330.PNG)
-
-### While using `transition_until_sleep: true`
-![image](https://user-images.githubusercontent.com/2219836/228949675-f9699624-8abc-466c-bb04-250ce0f495b8.png)
-<!-- SECTION:graphs:END -->
 
 <!-- SECTION:brightness-modes:START -->
 ### Custom brightness ramps using `brightness_mode` with `"linear"` and `"tanh"`
@@ -496,227 +471,9 @@ When `brightness_mode` is set to `"tanh"`, it uses the smooth transition of a [h
 </details>
 
 Notice the values of `brightness_mode_time_light` and `brightness_mode_time_dark` in the text box.
-![image](https://github.com/Ctrlable/natural-show/assets/6897215/15143580-13cd-4ab2-a603-89f2b7830afd)
-![image](https://github.com/Ctrlable/natural-show/assets/6897215/f61fdac9-6d47-48c9-84ed-cbb451d5de5d)
-![image](https://github.com/Ctrlable/natural-show/assets/6897215/e5fc5d27-3c37-4e3d-93d1-6e7cf4b48e7c)
-![image](https://github.com/Ctrlable/natural-show/assets/6897215/3dcbdc42-63c4-49df-8651-d2fae53dd08d)
 
 > Check out the interactive webapp on https://ctrlable.github.io/natural-show/ to play with the parameters and see how the brightness changes!
 <!-- SECTION:brightness-modes:END -->
 
-<!-- SECTION:see-also:START -->
-## :eyes: See also
 
-- [*Sleep better with Natural Show in Home Assistant*](https://wartner.io/sleep-better-with-adaptive-lightning-in-home-assistant/) by Florian Wartner on 2023-02-23 (blog post 📜)
-- [*Automatic smart light brightness and color based on the sun*](https://www.youtube.com/watch?v=Rg3zI1Oyk3c) by Home Automation Guy on 2022-08-31 (YouTube video 📺)
-- [*Natural Show Blew My Mind in Home Assistant - How to set it up*](https://www.youtube.com/watch?v=c1cnccmgl3k) by Smart Home Junkie on 2022-06-26 (YouTube video 📺)
-<!-- SECTION:see-also:END -->
 
-## :busts_in_silhouette: Contributors
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="http://www.nijho.lt/"><img src="https://avatars.githubusercontent.com/u/6897215?v=4?s=100" width="100px;" alt="Bas Nijholt"/><br /><sub><b>Bas Nijholt</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=basnijholt" title="Code">💻</a> <a href="#maintenance-basnijholt" title="Maintenance">🚧</a> <a href="https://github.com/Ctrlable/natural-show/issues?q=author%3Abasnijholt" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/wrt54g"><img src="https://avatars.githubusercontent.com/u/85389871?v=4?s=100" width="100px;" alt="Sven Serlier"/><br /><sub><b>Sven Serlier</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=wrt54g" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/willpuckett"><img src="https://avatars.githubusercontent.com/u/12959477?v=4?s=100" width="100px;" alt="Will Puckett"/><br /><sub><b>Will Puckett</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=willpuckett" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/vapescherov"><img src="https://avatars.githubusercontent.com/u/9620482?v=4?s=100" width="100px;" alt="vapescherov"/><br /><sub><b>vapescherov</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=vapescherov" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/travisp"><img src="https://avatars.githubusercontent.com/u/165698?v=4?s=100" width="100px;" alt="Travis Pew"/><br /><sub><b>Travis Pew</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=travisp" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sindrebroch"><img src="https://avatars.githubusercontent.com/u/10772085?v=4?s=100" width="100px;" alt="Sindre Broch"/><br /><sub><b>Sindre Broch</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=sindrebroch" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Shulyaka"><img src="https://avatars.githubusercontent.com/u/2741408?v=4?s=100" width="100px;" alt="Denis Shulyaka"/><br /><sub><b>Denis Shulyaka</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=Shulyaka" title="Code">💻</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/RubenKelevra"><img src="https://avatars.githubusercontent.com/u/614929?v=4?s=100" width="100px;" alt="@RubenKelevra"/><br /><sub><b>@RubenKelevra</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=RubenKelevra" title="Documentation">📖</a> <a href="https://github.com/Ctrlable/natural-show/commits?author=RubenKelevra" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Repsionu"><img src="https://avatars.githubusercontent.com/u/46962963?v=4?s=100" width="100px;" alt="Jüri Rebane"/><br /><sub><b>Jüri Rebane</b></sub></a><br /><a href="#translation-Repsionu" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/quantumlemur"><img src="https://avatars.githubusercontent.com/u/229782?v=4?s=100" width="100px;" alt="quantumlemur"/><br /><sub><b>quantumlemur</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=quantumlemur" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Oekn5w"><img src="https://avatars.githubusercontent.com/u/38046255?v=4?s=100" width="100px;" alt="Michael Kirsch"/><br /><sub><b>Michael Kirsch</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=Oekn5w" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://nicholai.dev/"><img src="https://avatars.githubusercontent.com/u/7280931?v=4?s=100" width="100px;" alt="Nicholai Nissen"/><br /><sub><b>Nicholai Nissen</b></sub></a><br /><a href="#translation-Nicholaiii" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/myhrmans"><img src="https://avatars.githubusercontent.com/u/14261388?v=4?s=100" width="100px;" alt="Martin Myhrman"/><br /><sub><b>Martin Myhrman</b></sub></a><br /><a href="#translation-myhrmans" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mpeterson"><img src="https://avatars.githubusercontent.com/u/11870?v=4?s=100" width="100px;" alt="Michel Peterson"/><br /><sub><b>Michel Peterson</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=mpeterson" title="Code">💻</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/MangoScango"><img src="https://avatars.githubusercontent.com/u/7623678?v=4?s=100" width="100px;" alt="MangoScango"/><br /><sub><b>MangoScango</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=MangoScango" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Lynilia"><img src="https://avatars.githubusercontent.com/u/89228568?v=4?s=100" width="100px;" alt="Lynilia"/><br /><sub><b>Lynilia</b></sub></a><br /><a href="#translation-Lynilia" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/LukaszP2"><img src="https://avatars.githubusercontent.com/u/44735995?v=4?s=100" width="100px;" alt="LukaszP2"/><br /><sub><b>LukaszP2</b></sub></a><br /><a href="#translation-LukaszP2" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jowgn"><img src="https://avatars.githubusercontent.com/u/24966042?v=4?s=100" width="100px;" alt="Joscha Wagner"/><br /><sub><b>Joscha Wagner</b></sub></a><br /><a href="#translation-jowgn" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/josecarlosfernandez"><img src="https://avatars.githubusercontent.com/u/624242?v=4?s=100" width="100px;" alt="skdzzz"/><br /><sub><b>skdzzz</b></sub></a><br /><a href="#translation-josecarlosfernandez" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/itssimon"><img src="https://avatars.githubusercontent.com/u/1176585?v=4?s=100" width="100px;" alt="Simon Gurcke"/><br /><sub><b>Simon Gurcke</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=itssimon" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://hypfer.de/"><img src="https://avatars.githubusercontent.com/u/974410?v=4?s=100" width="100px;" alt="Sören Beye"/><br /><sub><b>Sören Beye</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=Hypfer" title="Code">💻</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="http://medium.com/@hudsonbrendon"><img src="https://avatars.githubusercontent.com/u/5201888?v=4?s=100" width="100px;" alt="Hudson Brendon"/><br /><sub><b>Hudson Brendon</b></sub></a><br /><a href="#translation-hudsonbrendon" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/gvssr"><img src="https://avatars.githubusercontent.com/u/61377476?v=4?s=100" width="100px;" alt="Gabriel Visser"/><br /><sub><b>Gabriel Visser</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=gvssr" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/glebsterx"><img src="https://avatars.githubusercontent.com/u/8779304?v=4?s=100" width="100px;" alt="Gleb"/><br /><sub><b>Gleb</b></sub></a><br /><a href="#translation-glebsterx" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ghost"><img src="https://avatars.githubusercontent.com/u/10137?v=4?s=100" width="100px;" alt="Deleted user"/><br /><sub><b>Deleted user</b></sub></a><br /><a href="#translation-ghost" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://omg.dje.li/"><img src="https://avatars.githubusercontent.com/u/103232?v=4?s=100" width="100px;" alt="Avi Miller"/><br /><sub><b>Avi Miller</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=Djelibeybi" title="Documentation">📖</a> <a href="https://github.com/Ctrlable/natural-show/commits?author=Djelibeybi" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/denysdovhan"><img src="https://avatars.githubusercontent.com/u/3459374?v=4?s=100" width="100px;" alt="Denys Dovhan"/><br /><sub><b>Denys Dovhan</b></sub></a><br /><a href="#translation-denysdovhan" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://davidstenbeck.com/"><img src="https://avatars.githubusercontent.com/u/3330933?v=4?s=100" width="100px;" alt="David Stenbeck"/><br /><sub><b>David Stenbeck</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=Davst" title="Documentation">📖</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/danaues"><img src="https://avatars.githubusercontent.com/u/24459240?v=4?s=100" width="100px;" alt="Kevin Addeman"/><br /><sub><b>Kevin Addeman</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=danaues" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/covid10"><img src="https://avatars.githubusercontent.com/u/71146231?v=4?s=100" width="100px;" alt="covid10"/><br /><sub><b>covid10</b></sub></a><br /><a href="#translation-covid10" title="Translation">🌍</a> <a href="https://github.com/Ctrlable/natural-show/commits?author=covid10" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/chishm"><img src="https://avatars.githubusercontent.com/u/18148723?v=4?s=100" width="100px;" alt="Michael Chisholm"/><br /><sub><b>Michael Chisholm</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=chishm" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/blueshiftlabs"><img src="https://avatars.githubusercontent.com/u/1445520?v=4?s=100" width="100px;" alt="Justin Paupore"/><br /><sub><b>Justin Paupore</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=blueshiftlabs" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/bedaes"><img src="https://avatars.githubusercontent.com/u/8410205?v=4?s=100" width="100px;" alt="bedaes"/><br /><sub><b>bedaes</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=bedaes" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/awashingmachine"><img src="https://avatars.githubusercontent.com/u/79043726?v=4?s=100" width="100px;" alt="awashingmachine"/><br /><sub><b>awashingmachine</b></sub></a><br /><a href="#translation-awashingmachine" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/claytonjn"><img src="https://avatars.githubusercontent.com/u/3850252?v=4?s=100" width="100px;" alt="Clayton Nummer"/><br /><sub><b>Clayton Nummer</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=claytonjn" title="Code">💻</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/robert-crandall"><img src="https://avatars.githubusercontent.com/u/86014438?v=4?s=100" width="100px;" alt="Robert Crandall"/><br /><sub><b>Robert Crandall</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=robert-crandall" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://mattforster.ca/"><img src="https://avatars.githubusercontent.com/u/3375444?v=4?s=100" width="100px;" alt="Matt Forster"/><br /><sub><b>Matt Forster</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=matt-forster" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://www.dfki.de/en/web/about-us/employee/person/maho10"><img src="https://avatars.githubusercontent.com/u/64665067?v=4?s=100" width="100px;" alt="Mark Niemeyer"/><br /><sub><b>Mark Niemeyer</b></sub></a><br /><a href="#translation-Mark-Niemeyer" title="Translation">🌍</a> <a href="https://github.com/Ctrlable/natural-show/commits?author=Mark-Niemeyer" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/elliottplack/"><img src="https://avatars.githubusercontent.com/u/1827881?v=4?s=100" width="100px;" alt="Elliott Plack"/><br /><sub><b>Elliott Plack</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=talllguy" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ngommers"><img src="https://avatars.githubusercontent.com/u/82467671?v=4?s=100" width="100px;" alt="ngommers"/><br /><sub><b>ngommers</b></sub></a><br /><a href="#translation-ngommers" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/deviantintegral"><img src="https://avatars.githubusercontent.com/u/255023?v=4?s=100" width="100px;" alt="Andrew Berry"/><br /><sub><b>Andrew Berry</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=deviantintegral" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/brebtatv"><img src="https://avatars.githubusercontent.com/u/10747062?v=4?s=100" width="100px;" alt="Tomáš Valigura"/><br /><sub><b>Tomáš Valigura</b></sub></a><br /><a href="#translation-brebtatv" title="Translation">🌍</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/th3w1zard1"><img src="https://avatars.githubusercontent.com/u/2219836?v=4?s=100" width="100px;" alt="Benjamin Auquite"/><br /><sub><b>Benjamin Auquite</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=th3w1zard1" title="Code">💻</a> <a href="https://github.com/Ctrlable/natural-show/issues?q=author%3Ath3w1zard1" title="Bug reports">🐛</a> <a href="#maintenance-th3w1zard1" title="Maintenance">🚧</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/skycarl"><img src="https://avatars.githubusercontent.com/u/43375685?v=4?s=100" width="100px;" alt="Skyler Carlson"/><br /><sub><b>Skyler Carlson</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=skycarl" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/firstof9"><img src="https://avatars.githubusercontent.com/u/1105672?v=4?s=100" width="100px;" alt="Chris"/><br /><sub><b>Chris</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=firstof9" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/raman325"><img src="https://avatars.githubusercontent.com/u/7243222?v=4?s=100" width="100px;" alt="Raman Gupta"/><br /><sub><b>Raman Gupta</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=raman325" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/igiannakas"><img src="https://avatars.githubusercontent.com/u/59056762?v=4?s=100" width="100px;" alt="igiannakas"/><br /><sub><b>igiannakas</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=igiannakas" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://protyposis.net"><img src="https://avatars.githubusercontent.com/u/189372?v=4?s=100" width="100px;" alt="Mario Guggenberger"/><br /><sub><b>Mario Guggenberger</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=protyposis" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://ktibow.github.io/"><img src="https://avatars.githubusercontent.com/u/10727862?v=4?s=100" width="100px;" alt="Kendell R"/><br /><sub><b>Kendell R</b></sub></a><br /><a href="#design-KTibow" title="Design">🎨</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/lukerix"><img src="https://avatars.githubusercontent.com/u/93864731?v=4?s=100" width="100px;" alt="lukerix"/><br /><sub><b>lukerix</b></sub></a><br /><a href="#translation-lukerix" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Mexx62"><img src="https://avatars.githubusercontent.com/u/8066485?v=4?s=100" width="100px;" alt="Maxime Bailleul"/><br /><sub><b>Maxime Bailleul</b></sub></a><br /><a href="#translation-Mexx62" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://michelbalzer.de"><img src="https://avatars.githubusercontent.com/u/1337412?v=4?s=100" width="100px;" alt="Michel Balzer"/><br /><sub><b>Michel Balzer</b></sub></a><br /><a href="#translation-michelbalzer" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/enrico1036"><img src="https://avatars.githubusercontent.com/u/9280405?v=4?s=100" width="100px;" alt="Enrico Gambini"/><br /><sub><b>Enrico Gambini</b></sub></a><br /><a href="#translation-enrico1036" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/MirCore"><img src="https://avatars.githubusercontent.com/u/9919366?v=4?s=100" width="100px;" alt="MirCore"/><br /><sub><b>MirCore</b></sub></a><br /><a href="#translation-MirCore" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://kilfer.es/"><img src="https://avatars.githubusercontent.com/u/290854?v=4?s=100" width="100px;" alt="Fernando Belaza"/><br /><sub><b>Fernando Belaza</b></sub></a><br /><a href="#translation-KilFer" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/wilcomir"><img src="https://avatars.githubusercontent.com/u/795981?v=4?s=100" width="100px;" alt="Vladimir Cravero"/><br /><sub><b>Vladimir Cravero</b></sub></a><br /><a href="#translation-wilcomir" title="Translation">🌍</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="http://www.latavernedutroll.fr"><img src="https://avatars.githubusercontent.com/u/255774?v=4?s=100" width="100px;" alt="Julien Quiévreux"/><br /><sub><b>Julien Quiévreux</b></sub></a><br /><a href="#translation-letroll" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/lightrabbit"><img src="https://avatars.githubusercontent.com/u/1521765?v=4?s=100" width="100px;" alt="lightrabbit"/><br /><sub><b>lightrabbit</b></sub></a><br /><a href="#translation-lightrabbit" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Arie6414"><img src="https://avatars.githubusercontent.com/u/129661911?v=4?s=100" width="100px;" alt="Arie6414"/><br /><sub><b>Arie6414</b></sub></a><br /><a href="#translation-Arie6414" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/luixcaetano"><img src="https://avatars.githubusercontent.com/u/4554163?v=4?s=100" width="100px;" alt="luixcaetano"/><br /><sub><b>luixcaetano</b></sub></a><br /><a href="#translation-luixcaetano" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/fmarcu"><img src="https://avatars.githubusercontent.com/u/81946691?v=4?s=100" width="100px;" alt="fmarcu"/><br /><sub><b>fmarcu</b></sub></a><br /><a href="#translation-fmarcu" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/michaelkmoch"><img src="https://avatars.githubusercontent.com/u/107689026?v=4?s=100" width="100px;" alt="michaelkmoch"/><br /><sub><b>michaelkmoch</b></sub></a><br /><a href="#translation-michaelkmoch" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/fbloemhof"><img src="https://avatars.githubusercontent.com/u/8753211?v=4?s=100" width="100px;" alt="Fred"/><br /><sub><b>Fred</b></sub></a><br /><a href="#translation-fbloemhof" title="Translation">🌍</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Z-weapon"><img src="https://avatars.githubusercontent.com/u/13939632?v=4?s=100" width="100px;" alt="Z-weapon"/><br /><sub><b>Z-weapon</b></sub></a><br /><a href="#translation-Z-weapon" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/kylebjordahl"><img src="https://avatars.githubusercontent.com/u/3489222?v=4?s=100" width="100px;" alt="Kyle Bjordahl"/><br /><sub><b>Kyle Bjordahl</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=kylebjordahl" title="Code">💻</a> <a href="https://github.com/Ctrlable/natural-show/issues?q=author%3Akylebjordahl" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/olekbruks"><img src="https://avatars.githubusercontent.com/u/8738016?v=4?s=100" width="100px;" alt="Olek Bruks"/><br /><sub><b>Olek Bruks</b></sub></a><br /><a href="#translation-olekbruks" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://gabrielebaldassarre.com"><img src="https://avatars.githubusercontent.com/u/1724406?v=4?s=100" width="100px;" alt="Gabriele Baldassarre"/><br /><sub><b>Gabriele Baldassarre</b></sub></a><br /><a href="#translation-theclue" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/pbaart"><img src="https://avatars.githubusercontent.com/u/2856849?v=4?s=100" width="100px;" alt="Pepijn Baart"/><br /><sub><b>Pepijn Baart</b></sub></a><br /><a href="#translation-pbaart" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://ovoi.io"><img src="https://avatars.githubusercontent.com/u/3490616?v=4?s=100" width="100px;" alt="Artem Pastukhov"/><br /><sub><b>Artem Pastukhov</b></sub></a><br /><a href="#translation-pastukhov" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://stefany.eu"><img src="https://avatars.githubusercontent.com/u/57348587?v=4?s=100" width="100px;" alt="Martin Štefany"/><br /><sub><b>Martin Štefany</b></sub></a><br /><a href="#translation-mstefany" title="Translation">🌍</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/quenthal"><img src="https://avatars.githubusercontent.com/u/17827203?v=4?s=100" width="100px;" alt="quenthal"/><br /><sub><b>quenthal</b></sub></a><br /><a href="#translation-quenthal" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Luki72"><img src="https://avatars.githubusercontent.com/u/22493116?v=4?s=100" width="100px;" alt="Luki72"/><br /><sub><b>Luki72</b></sub></a><br /><a href="#translation-Luki72" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/pantan-cymk"><img src="https://avatars.githubusercontent.com/u/87476229?v=4?s=100" width="100px;" alt="pantan-cymk"/><br /><sub><b>pantan-cymk</b></sub></a><br /><a href="#translation-pantan-cymk" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/yousaf465"><img src="https://avatars.githubusercontent.com/u/83491212?v=4?s=100" width="100px;" alt="yousaf465"/><br /><sub><b>yousaf465</b></sub></a><br /><a href="#translation-yousaf465" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/baylanger"><img src="https://avatars.githubusercontent.com/u/5240348?v=4?s=100" width="100px;" alt="Pierre Belanger"/><br /><sub><b>Pierre Belanger</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=baylanger" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://www.jan-sigurd.com"><img src="https://avatars.githubusercontent.com/u/8410766?v=4?s=100" width="100px;" alt="Jan-Sigurd Sørensen"/><br /><sub><b>Jan-Sigurd Sørensen</b></sub></a><br /><a href="#translation-jansigu" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/EF01"><img src="https://avatars.githubusercontent.com/u/20759250?v=4?s=100" width="100px;" alt="EF01"/><br /><sub><b>EF01</b></sub></a><br /><a href="#translation-EF01" title="Translation">🌍</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/MrSnakeSPb"><img src="https://avatars.githubusercontent.com/u/68160409?v=4?s=100" width="100px;" alt="Mr Snake"/><br /><sub><b>Mr Snake</b></sub></a><br /><a href="#translation-MrSnakeSPb" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/hungrymachine1"><img src="https://avatars.githubusercontent.com/u/73683742?v=4?s=100" width="100px;" alt="hungrymachine1"/><br /><sub><b>hungrymachine1</b></sub></a><br /><a href="#translation-hungrymachine1" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/4D4M-Github"><img src="https://avatars.githubusercontent.com/u/123521171?v=4?s=100" width="100px;" alt="4D4M-Github"/><br /><sub><b>4D4M-Github</b></sub></a><br /><a href="#translation-4D4M-Github" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sayaivan"><img src="https://avatars.githubusercontent.com/u/49090860?v=4?s=100" width="100px;" alt="Ivan"/><br /><sub><b>Ivan</b></sub></a><br /><a href="#translation-sayaivan" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://www.floca.be"><img src="https://avatars.githubusercontent.com/u/13313104?v=4?s=100" width="100px;" alt="Florent Cardoen"/><br /><sub><b>Florent Cardoen</b></sub></a><br /><a href="#translation-Fllorent0D" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/moemeli"><img src="https://avatars.githubusercontent.com/u/73445184?v=4?s=100" width="100px;" alt="moemeli"/><br /><sub><b>moemeli</b></sub></a><br /><a href="#translation-moemeli" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/saya6k"><img src="https://avatars.githubusercontent.com/u/63517312?v=4?s=100" width="100px;" alt="saya6k"/><br /><sub><b>saya6k</b></sub></a><br /><a href="#translation-saya6k" title="Translation">🌍</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/droans"><img src="https://avatars.githubusercontent.com/u/49721649?v=4?s=100" width="100px;" alt="droans"/><br /><sub><b>droans</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=droans" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://blogs.gnome.org/jonathankang/"><img src="https://avatars.githubusercontent.com/u/5607743?v=4?s=100" width="100px;" alt="Jonathan Kang"/><br /><sub><b>Jonathan Kang</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=JonathanKang" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/scuricvladimir"><img src="https://avatars.githubusercontent.com/u/46634162?v=4?s=100" width="100px;" alt="scuricvladimir"/><br /><sub><b>scuricvladimir</b></sub></a><br /><a href="#translation-scuricvladimir" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Welsyntoffie"><img src="https://avatars.githubusercontent.com/u/47089904?v=4?s=100" width="100px;" alt="Pieter"/><br /><sub><b>Pieter</b></sub></a><br /><a href="#translation-Welsyntoffie" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/san80068259"><img src="https://avatars.githubusercontent.com/u/68324107?v=4?s=100" width="100px;" alt="san80068259"/><br /><sub><b>san80068259</b></sub></a><br /><a href="#translation-san80068259" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/erdnaxela02"><img src="https://avatars.githubusercontent.com/u/21007415?v=4?s=100" width="100px;" alt="Frosh"/><br /><sub><b>Frosh</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=erdnaxela02" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/rafaeltmiranda/"><img src="https://avatars.githubusercontent.com/u/47206949?v=4?s=100" width="100px;" alt="Rafael Miranda"/><br /><sub><b>Rafael Miranda</b></sub></a><br /><a href="#translation-rafaeltmiranda" title="Translation">🌍</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/rVlad93"><img src="https://avatars.githubusercontent.com/u/60452666?v=4?s=100" width="100px;" alt="rVlad93"/><br /><sub><b>rVlad93</b></sub></a><br /><a href="#translation-rVlad93" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://blog.ebbinghaus.me/"><img src="https://avatars.githubusercontent.com/u/2965273?v=4?s=100" width="100px;" alt="Björn Ebbinghaus"/><br /><sub><b>Björn Ebbinghaus</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=MrEbbinghaus" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Marck"><img src="https://avatars.githubusercontent.com/u/18088281?v=4?s=100" width="100px;" alt="Marck"/><br /><sub><b>Marck</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=Marck" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://carmodsheaven.com"><img src="https://avatars.githubusercontent.com/u/11273726?v=4?s=100" width="100px;" alt="Lucho Gizdov"/><br /><sub><b>Lucho Gizdov</b></sub></a><br /><a href="#translation-lachezar-gizdov" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/MizterB"><img src="https://avatars.githubusercontent.com/u/5458030?v=4?s=100" width="100px;" alt="MizterB"/><br /><sub><b>MizterB</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=MizterB" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/brietman"><img src="https://avatars.githubusercontent.com/u/17436537?v=4?s=100" width="100px;" alt="brietman"/><br /><sub><b>brietman</b></sub></a><br /><a href="#translation-brietman" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/TamilNeram"><img src="https://avatars.githubusercontent.com/u/67970539?v=4?s=100" width="100px;" alt="தமிழ் நேரம்"/><br /><sub><b>தமிழ் நேரம்</b></sub></a><br /><a href="#translation-TamilNeram" title="Translation">🌍</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Thunderstrike116"><img src="https://avatars.githubusercontent.com/u/23220766?v=4?s=100" width="100px;" alt="Thunderstrike116"/><br /><sub><b>Thunderstrike116</b></sub></a><br /><a href="#translation-Thunderstrike116" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/immeteor2"><img src="https://avatars.githubusercontent.com/u/125735487?v=4?s=100" width="100px;" alt="immeteor2"/><br /><sub><b>immeteor2</b></sub></a><br /><a href="#translation-immeteor2" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/pbassut"><img src="https://avatars.githubusercontent.com/u/1500037?v=4?s=100" width="100px;" alt="Patrick Bassut"/><br /><sub><b>Patrick Bassut</b></sub></a><br /><a href="#translation-pbassut" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Ricky-Tigg"><img src="https://avatars.githubusercontent.com/u/26058215?v=4?s=100" width="100px;" alt="Ricky Tigg"/><br /><sub><b>Ricky Tigg</b></sub></a><br /><a href="#translation-Ricky-Tigg" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/marazmarci"><img src="https://avatars.githubusercontent.com/u/1349654?v=4?s=100" width="100px;" alt="Márton Maráz"/><br /><sub><b>Márton Maráz</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=marazmarci" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Sara492"><img src="https://avatars.githubusercontent.com/u/63058202?v=4?s=100" width="100px;" alt="Sara492"/><br /><sub><b>Sara492</b></sub></a><br /><a href="#translation-Sara492" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/enpaga"><img src="https://avatars.githubusercontent.com/u/180730931?v=4?s=100" width="100px;" alt="enpaga"/><br /><sub><b>enpaga</b></sub></a><br /><a href="#translation-enpaga" title="Translation">🌍</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/xuars"><img src="https://avatars.githubusercontent.com/u/197080354?v=4?s=100" width="100px;" alt="xuars"/><br /><sub><b>xuars</b></sub></a><br /><a href="#translation-xuars" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/tinutac"><img src="https://avatars.githubusercontent.com/u/2151553?v=4?s=100" width="100px;" alt="tinutac"/><br /><sub><b>tinutac</b></sub></a><br /><a href="#translation-tinutac" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/defaultpage"><img src="https://avatars.githubusercontent.com/u/22825202?v=4?s=100" width="100px;" alt="Default User"/><br /><sub><b>Default User</b></sub></a><br /><a href="#translation-defaultpage" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/amelenty"><img src="https://avatars.githubusercontent.com/u/29466876?v=4?s=100" width="100px;" alt="amelenty"/><br /><sub><b>amelenty</b></sub></a><br /><a href="#translation-amelenty" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://ua.linkedin.com/in/rostyslav-dudka"><img src="https://avatars.githubusercontent.com/u/15959384?v=4?s=100" width="100px;" alt="Rostyslav Dudka"/><br /><sub><b>Rostyslav Dudka</b></sub></a><br /><a href="#translation-yeaxi" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/helderfmf"><img src="https://avatars.githubusercontent.com/u/5622687?v=4?s=100" width="100px;" alt="Helder Ferreira"/><br /><sub><b>Helder Ferreira</b></sub></a><br /><a href="#translation-helderfmf" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://mrpiotr.dev"><img src="https://avatars.githubusercontent.com/u/11849621?v=4?s=100" width="100px;" alt="Piotr Laszczkowski"/><br /><sub><b>Piotr Laszczkowski</b></sub></a><br /><a href="#translation-mrpiotr-dev" title="Translation">🌍</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="http://rezaalmanda.github.io"><img src="https://avatars.githubusercontent.com/u/22217419?v=4?s=100" width="100px;" alt="Reza"/><br /><sub><b>Reza</b></sub></a><br /><a href="#translation-rezaalmanda" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/bittin"><img src="https://avatars.githubusercontent.com/u/43197?v=4?s=100" width="100px;" alt="Luna Jernberg"/><br /><sub><b>Luna Jernberg</b></sub></a><br /><a href="#translation-bittin" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://jeffalwilson.com"><img src="https://avatars.githubusercontent.com/u/1368827?v=4?s=100" width="100px;" alt="Jeff Wilson"/><br /><sub><b>Jeff Wilson</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=jawilson" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/TermeHansen"><img src="https://avatars.githubusercontent.com/u/6922018?v=4?s=100" width="100px;" alt="Rasmus Lundsgaard"/><br /><sub><b>Rasmus Lundsgaard</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=TermeHansen" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Tommatheussen"><img src="https://avatars.githubusercontent.com/u/13683094?v=4?s=100" width="100px;" alt="Tom Matheussen"/><br /><sub><b>Tom Matheussen</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=Tommatheussen" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ams2990"><img src="https://avatars.githubusercontent.com/u/488907?v=4?s=100" width="100px;" alt="ams2990"/><br /><sub><b>ams2990</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=ams2990" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/DataGhost"><img src="https://avatars.githubusercontent.com/u/3911340?v=4?s=100" width="100px;" alt="DataGhost"/><br /><sub><b>DataGhost</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=DataGhost" title="Code">💻</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://iamfurkan.com"><img src="https://avatars.githubusercontent.com/u/23127261?v=4?s=100" width="100px;" alt="Furkan Kaya"/><br /><sub><b>Furkan Kaya</b></sub></a><br /><a href="#translation-Wijt" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Rafael4A"><img src="https://avatars.githubusercontent.com/u/32150173?v=4?s=100" width="100px;" alt="Rafael do Amaral Porciuncula"/><br /><sub><b>Rafael do Amaral Porciuncula</b></sub></a><br /><a href="#translation-Rafael4A" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/hhjuhl"><img src="https://avatars.githubusercontent.com/u/84127693?v=4?s=100" width="100px;" alt="hhjuhl"/><br /><sub><b>hhjuhl</b></sub></a><br /><a href="#translation-hhjuhl" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Athishbalu"><img src="https://avatars.githubusercontent.com/u/177029556?v=4?s=100" width="100px;" alt="B.Athish"/><br /><sub><b>B.Athish</b></sub></a><br /><a href="#translation-Athishbalu" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/maksim2005UKR"><img src="https://avatars.githubusercontent.com/u/233082001?v=4?s=100" width="100px;" alt="Горпиніч Максим Олександрович"/><br /><sub><b>Горпиніч Максим Олександрович</b></sub></a><br /><a href="#translation-maksim2005UKR" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://plageoj.me"><img src="https://avatars.githubusercontent.com/u/10688301?v=4?s=100" width="100px;" alt="Masayuki Sugahara"/><br /><sub><b>Masayuki Sugahara</b></sub></a><br /><a href="#translation-plageoj" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/therealmate"><img src="https://avatars.githubusercontent.com/u/61843503?v=4?s=100" width="100px;" alt="therealmate"/><br /><sub><b>therealmate</b></sub></a><br /><a href="#translation-therealmate" title="Translation">🌍</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/dobby5"><img src="https://avatars.githubusercontent.com/u/1346316?v=4?s=100" width="100px;" alt="Dobby"/><br /><sub><b>Dobby</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=dobby5" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/lenucksi"><img src="https://avatars.githubusercontent.com/u/2451899?v=4?s=100" width="100px;" alt="lenucksi"/><br /><sub><b>lenucksi</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=lenucksi" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://gitlab.com/edgimar"><img src="https://avatars.githubusercontent.com/u/393850?v=4?s=100" width="100px;" alt="edgimar"/><br /><sub><b>edgimar</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=edgimar" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/andrei-lazarov"><img src="https://avatars.githubusercontent.com/u/51081857?v=4?s=100" width="100px;" alt="Andrei LAZAROV"/><br /><sub><b>Andrei LAZAROV</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=andrei-lazarov" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ademuri"><img src="https://avatars.githubusercontent.com/u/3051618?v=4?s=100" width="100px;" alt="Adam DeMuri"/><br /><sub><b>Adam DeMuri</b></sub></a><br /><a href="https://github.com/Ctrlable/natural-show/commits?author=ademuri" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/NatanDosAnjos"><img src="https://avatars.githubusercontent.com/u/45629905?v=4?s=100" width="100px;" alt="Natanael"/><br /><sub><b>Natanael</b></sub></a><br /><a href="#translation-NatanDosAnjos" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Yllelder"><img src="https://avatars.githubusercontent.com/u/6941502?v=4?s=100" width="100px;" alt="Yllelder Bamir"/><br /><sub><b>Yllelder Bamir</b></sub></a><br /><a href="#translation-Yllelder" title="Translation">🌍</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Esspel"><img src="https://avatars.githubusercontent.com/u/47383506?v=4?s=100" width="100px;" alt="Esspel"/><br /><sub><b>Esspel</b></sub></a><br /><a href="#translation-Esspel" title="Translation">🌍</a></td>
-    </tr>
-  </tbody>
-  <tfoot>
-    <tr>
-      <td align="center" size="13px" colspan="7">
-        <img src="https://raw.githubusercontent.com/all-contributors/all-contributors-cli/1b8533af435da9854653492b1327a23a4dbd0a10/assets/logo-small.svg">
-          <a href="https://all-contributors.js.org/docs/en/bot/usage">Add your contributions</a>
-        </img>
-      </td>
-    </tr>
-  </tfoot>
-</table>
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-## Translating Natural Show
-
-Help to translate Natural Show into your language on [Hosted Weblate](https://hosted.weblate.org/engage/natural-show/)!
-
-Translating can be done from your webbrowser, no programming knowledge
-is needed!
-
-<a href="https://hosted.weblate.org/engage/natural-show/">
-<img src="https://hosted.weblate.org/widget/natural-show/multi-auto.svg" alt="Translation status" />
-</a>
