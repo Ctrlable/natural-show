@@ -1,11 +1,13 @@
 """Natural Show integration in Home-Assistant."""
 
 import logging
+import mimetypes
 from pathlib import Path
 from typing import Any
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
+from aiohttp import web
 from homeassistant.components.http import HomeAssistantView
 from homeassistant.components.panel_custom import async_register_panel
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
@@ -103,6 +105,28 @@ class NaturalShowConfigView(HomeAssistantView):
         return self.json({"entry_id": entry_id, "options": dict(entry.options)})
 
 
+class NaturalShowStaticView(HomeAssistantView):
+    """Serve Natural Show www/ assets without relying on register_static_path."""
+
+    url  = "/natural_show/www/{filename:.+}"
+    name = "natural_show:www"
+    requires_auth = False
+
+    async def get(self, request, filename: str):
+        """Return a file from the www directory."""
+        # Block path traversal
+        safe = Path(filename).name
+        if safe != filename or ".." in filename:
+            raise web.HTTPForbidden()
+        file_path = _WWW_DIR / safe
+        if not file_path.exists() or not file_path.is_file():
+            raise web.HTTPNotFound()
+        content_type, _ = mimetypes.guess_type(safe)
+        if content_type is None:
+            content_type = "application/octet-stream"
+        return web.Response(body=file_path.read_bytes(), content_type=content_type)
+
+
 async def reload_configuration_yaml(event: Event) -> None:
     """Reload configuration.yaml."""
     hass: HomeAssistant | None = event.data.get("hass")
@@ -117,9 +141,8 @@ async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
     global _REGISTERED  # noqa: PLW0603
     if not _REGISTERED:
         _REGISTERED = True
-        # Serve the www/ directory (Lovelace card + config panel)
-        if _WWW_DIR.exists():
-            hass.http.register_static_path(_WWW_URL, str(_WWW_DIR), cache_headers=False)
+        # Serve www/ files via a view (compatible with all HA versions)
+        hass.http.register_view(NaturalShowStaticView)
         # Register REST view used by the panel to persist options
         hass.http.register_view(NaturalShowConfigView)
         # Register the full-page configuration panel at /natural-show
