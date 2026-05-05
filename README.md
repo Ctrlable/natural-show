@@ -1,5 +1,5 @@
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge)](https://github.com/hacs/integration)
-![Version](https://img.shields.io/github/v/release/basnijholt/natural-show?style=for-the-badge)
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/hacs/integration)
+![Version](https://img.shields.io/github/v/release/Ctrlable/natural-show?style=for-the-badge)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-134-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
@@ -10,9 +10,38 @@
 
 [Natural Show](https://github.com/Ctrlable/natural-show) is a custom component for [Home Assistant](https://www.home-assistant.io/) that intelligently adjusts the brightness and color of your lights 💡 based on the sun's position, while still allowing for manual control.
 
-Download and install directly through [HACS (Home Assistant Community Store)](https://hacs.xyz/):
+## :arrow_down: Installation via HACS
 
-[![Open your Home Assistant instance and open the Natural Show integration inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=basnijholt&repository=natural-show&category=integration)
+Natural Show is installed as a **custom repository** in [HACS (Home Assistant Community Store)](https://hacs.xyz/).
+
+### One-click (My Home Assistant)
+
+Click the button below — it will open HACS and pre-fill the repository URL for you:
+
+[![Open your Home Assistant instance and open the Natural Show integration inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Ctrlable&repository=natural-show&category=integration)
+
+### Manual steps
+
+1. Make sure [HACS](https://hacs.xyz/docs/use/download/download/#to-download-hacs-core) is installed in your Home Assistant instance.
+2. In the HACS panel, click the **⋮** (three-dot menu) in the top-right corner and choose **Custom repositories**.
+3. Enter the URL `https://github.com/Ctrlable/natural-show` and set the category to **Integration**, then click **Add**.
+4. Search for **Natural Show** in HACS and click **Download**.
+5. Restart Home Assistant.
+6. Go to **Settings → Devices & Services → + Add Integration** and search for **Natural Show**.
+
+### Lovelace card (bundled)
+
+The enhanced configuration card (`natural-show-config-card`) is bundled with the integration and served automatically. After installing and restarting, add it once to your Lovelace resources:
+
+```
+/natural_show/www/natural-show-config-card.js   (type: module)
+```
+
+Then add a card to any dashboard:
+
+```yaml
+type: custom:natural-show-config-card
+```
 
 By automatically adapting the settings of your lights throughout the day, Natural Show helps maintain your natural circadian rhythm 😴, which can lead to improved sleep, mood, and overall well-being. Experience cooler color temperatures at noon, gradually transitioning to warmer colors at sunset and sunrise.
 

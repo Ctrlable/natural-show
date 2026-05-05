@@ -1,7 +1,7 @@
 {
   "domain": "natural_show",
   "name": "Natural Show",
-  "codeowners": ["@basnijholt", "@RubenKelevra", "@th3w1zard1", "@protyposis"],
+  "codeowners": ["@Ctrlable"],
   "config_flow": true,
   "dependencies": ["light"],
   "documentation": "https://github.com/Ctrlable/natural-show#readme",
