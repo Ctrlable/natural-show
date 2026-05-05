@@ -104,10 +104,10 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 
 class OptionsFlowHandler(config_entries.OptionsFlow):
-    """Options flow: redirects to the full-page Natural Show configuration panel."""
+    """Options flow: opens the full-page configuration panel directly via external step."""
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None):
-        """Show a link to the full-page panel; complete when user returns and submits."""
+        """Open the panel immediately; complete when the panel calls WS configure."""
         conf = self.config_entry
 
         if conf.source == config_entries.SOURCE_IMPORT:
@@ -118,16 +118,15 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             )
 
         if user_input is not None:
-            # User returned from the panel and clicked Submit.
-            # Options were already saved by the panel via the REST API.
-            return self.async_create_entry(title="", data=dict(conf.options))
+            # Panel saved options and called the WS configure endpoint → finish.
+            return self.async_external_step_done(next_step_id="finish")
 
-        return self.async_show_form(
+        # Redirect immediately to the full-page panel.
+        return self.async_external_step(
             step_id="init",
-            data_schema=vol.Schema({}),
-            description_placeholders={
-                "panel_url": f"{_PANEL_URL}?entry_id={conf.entry_id}",
-                "entry_name": conf.title,
-                **OPTIONS_FLOW_DESCRIPTION_PLACEHOLDERS,
-            },
+            url=f"{_PANEL_URL}?entry_id={conf.entry_id}&flow_id={self.flow_id}",
         )
+
+    async def async_step_finish(self, user_input: dict[str, Any] | None = None):
+        """Finalise the options flow after the panel saves."""
+        return self.async_create_entry(title="", data=dict(self.config_entry.options))

@@ -24,7 +24,7 @@
     "step": {
       "init": {
         "title": "Configure Natural Show",
-        "description": "Open the [Natural Show configuration panel]({panel_url}) to configure **{entry_name}** with the interactive circadian simulator, area/room light selection tree, and all settings.\n\nAfter saving in the panel, click **Submit** here to confirm."
+        "description": "The Natural Show configuration panel will open. Configure your circadian program, select lights from the area/room tree, and click **Save & Apply** in the panel to complete."
       },
       "lights": {
         "title": "Select Lights",
