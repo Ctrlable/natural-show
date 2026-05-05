@@ -1,1 +1,1 @@
-"""Shiny webapp for Adaptive Lighting."""
+"""Shiny webapp for Natural Show."""

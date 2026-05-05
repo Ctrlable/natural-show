@@ -4,24 +4,24 @@ icon: lucide/settings
 
 # Configuration
 
-Adaptive Lighting supports configuration through both YAML and the Home Assistant UI, with identical option names in both methods.
+Natural Show supports configuration through both YAML and the Home Assistant UI, with identical option names in both methods.
 
 ## Basic Configuration
 
 The minimal configuration requires only adding the integration to your `configuration.yaml`:
 
 ```yaml
-adaptive_lighting:
+natural_show:
 ```
 
-You can then configure everything through the UI at **Settings** → **Devices & Services** → **Adaptive Lighting** → **Configure**.
+You can then configure everything through the UI at **Settings** → **Devices & Services** → **Natural Show** → **Configure**.
 
 ## YAML Configuration
 
 For YAML configuration, you can specify lights and options directly:
 
 ```yaml
-adaptive_lighting:
+natural_show:
   - name: "Living Room"
     lights:
       - light.living_room_ceiling
@@ -33,7 +33,7 @@ adaptive_lighting:
 All configuration options are listed below with their default values. These options work identically in both YAML and the UI.
 
 <!-- CODE:START -->
-<!-- from adaptive_lighting._docs_helpers import generate_config_markdown_table -->
+<!-- from natural_show._docs_helpers import generate_config_markdown_table -->
 <!-- print(generate_config_markdown_table()) -->
 <!-- CODE:END -->
 <!-- OUTPUT:START -->
@@ -54,7 +54,7 @@ All configuration options are listed below with their default values. These opti
 | `sleep_color_temp`             | Color temperature in sleep mode (used when `sleep_rgb_or_color_temp` is `color_temp`) in Kelvin. 😴                                                                                                                                                                                                                                                                                           | `1000`         | `int` 1000-10000                        |
 | `sleep_rgb_color`              | RGB color in sleep mode (used when `sleep_rgb_or_color_temp` is "rgb_color"). 🌈                                                                                                                                                                                                                                                                                                              | `[255, 56, 0]` | RGB color                               |
 | `sleep_transition`             | Duration of transition when "sleep mode" is toggled in seconds. 😴                                                                                                                                                                                                                                                                                                                            | `1`            | `float` 0-6553                          |
-| `transition_until_sleep`       | When enabled, Adaptive Lighting will treat sleep settings as the minimum, transitioning to these values after sunset. 🌙                                                                                                                                                                                                                                                                      | `False`        | `bool`                                  |
+| `transition_until_sleep`       | When enabled, Natural Show will treat sleep settings as the minimum, transitioning to these values after sunset. 🌙                                                                                                                                                                                                                                                                      | `False`        | `bool`                                  |
 | `sunrise_time`                 | Set a fixed time (HH:MM:SS) for sunrise. 🌅                                                                                                                                                                                                                                                                                                                                                   | `None`         | `str`                                   |
 | `min_sunrise_time`             | Set the earliest virtual sunrise time (HH:MM:SS), allowing for later sunrises. 🌅                                                                                                                                                                                                                                                                                                             | `None`         | `str`                                   |
 | `max_sunrise_time`             | Set the latest virtual sunrise time (HH:MM:SS), allowing for earlier sunrises. 🌅                                                                                                                                                                                                                                                                                                             | `None`         | `str`                                   |
@@ -74,7 +74,7 @@ All configuration options are listed below with their default values. These opti
 | `adapt_only_on_bare_turn_on`   | When turning lights on initially. If set to `true`, AL adapts only if `light.turn_on` is invoked without specifying color or brightness. ❌🌈 This e.g., prevents adaptation when activating a scene and marks the light as manually controlled. If `false`, AL adapts regardless of the presence of color or brightness in the initial `service_data`. Needs `take_over_control` enabled. 🕵️ | `False`        | `bool`                                  |
 | `separate_turn_on_commands`    | Use separate `light.turn_on` calls for color and brightness, needed for some light types. 🔀                                                                                                                                                                                                                                                                                                  | `False`        | `bool`                                  |
 | `send_split_delay`             | Delay (ms) between `separate_turn_on_commands` for lights that don't support simultaneous brightness and color setting. ⏲️                                                                                                                                                                                                                                                                    | `0`            | `int` 0-10000                           |
-| `adapt_delay`                  | Wait time (seconds) between light turn on and Adaptive Lighting applying changes. Might help to avoid flickering. ⏲️                                                                                                                                                                                                                                                                          | `0`            | `float > 0`                             |
+| `adapt_delay`                  | Wait time (seconds) between light turn on and Natural Show applying changes. Might help to avoid flickering. ⏲️                                                                                                                                                                                                                                                                          | `0`            | `float > 0`                             |
 | `skip_redundant_commands`      | Skip sending adaptation commands whose target state already equals the light's known state. Minimizes network traffic and improves the adaptation responsivity in some situations. 📉Disable if physical light states get out of sync with HA's recorded state.                                                                                                                               | `False`        | `bool`                                  |
 | `intercept`                    | Intercept and adapt `light.turn_on` calls to enabling instantaneous color and brightness adaptation. 🏎️ Disable for lights that do not support `light.turn_on` with color and brightness.                                                                                                                                                                                                     | `True`         | `bool`                                  |
 | `multi_light_intercept`        | Intercept and adapt `light.turn_on` calls that target multiple lights. ➗⚠️ This might result in splitting up a single `light.turn_on` call into multiple calls, e.g., when lights are in different switches. Requires `intercept` to be enabled.                                                                                                                                             | `True`         | `bool`                                  |
@@ -85,7 +85,7 @@ All configuration options are listed below with their default values. These opti
 ## Full Configuration Example
 
 <!-- CODE:START -->
-<!-- from adaptive_lighting.docs_gen import _transform_readme_links -->
+<!-- from natural_show.docs_gen import _transform_readme_links -->
 <!-- print(_transform_readme_links(include_section("../README.md", "config-example-full"))) -->
 <!-- CODE:END -->
 <!-- OUTPUT:START -->
@@ -94,7 +94,7 @@ Full example:
 
 ```yaml
 # Example configuration.yaml entry
-adaptive_lighting:
+natural_show:
 - name: "default"
   lights: []
   prefer_rgb_color: false
@@ -121,10 +121,10 @@ adaptive_lighting:
 
 ## Multiple Configurations
 
-You can create multiple Adaptive Lighting configurations for different areas or use cases:
+You can create multiple Natural Show configurations for different areas or use cases:
 
 ```yaml
-adaptive_lighting:
+natural_show:
   - name: "Daytime Spaces"
     lights:
       - light.living_room

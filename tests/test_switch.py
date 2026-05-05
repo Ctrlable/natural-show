@@ -1,4 +1,4 @@
-"""Tests for Adaptive Lighting switches."""
+"""Tests for Natural Show switches."""
 
 # pylint: disable=protected-access
 import asyncio
@@ -16,15 +16,15 @@ import pytest
 import ulid_transform
 import voluptuous.error
 from flaky import flaky
-from homeassistant.components.adaptive_lighting.adaptation_utils import (
+from homeassistant.components.natural_show.adaptation_utils import (
     AdaptationData,
     LightControlAttributes,
     _create_service_call_data_iterator,
 )
-from homeassistant.components.adaptive_lighting.color_and_brightness import (
+from homeassistant.components.natural_show.color_and_brightness import (
     lerp_color_hsv,
 )
-from homeassistant.components.adaptive_lighting.const import (
+from homeassistant.components.natural_show.const import (
     ADAPT_BRIGHTNESS_SWITCH,
     ADAPT_COLOR_SWITCH,
     ATTR_ADAPTIVE_LIGHTING_MANAGER,
@@ -64,9 +64,9 @@ from homeassistant.components.adaptive_lighting.const import (
     UNDO_UPDATE_LISTENER,
     TakeOverControlMode,
 )
-from homeassistant.components.adaptive_lighting.switch import (
+from homeassistant.components.natural_show.switch import (
     CONF_INTERCEPT,
-    AdaptiveLightingManager,
+    NaturalShowManager,
     AdaptiveSwitch,
     SimpleSwitch,
     _attributes_have_changed,
@@ -170,7 +170,7 @@ def reset_time_zone():
 @pytest.fixture
 async def cleanup(hass):
     yield
-    manager: AdaptiveLightingManager = hass.data[DOMAIN][ATTR_ADAPTIVE_LIGHTING_MANAGER]
+    manager: NaturalShowManager = hass.data[DOMAIN][ATTR_ADAPTIVE_LIGHTING_MANAGER]
     for timer in manager.auto_reset_manual_control_timers.values():
         timer.cancel()
     for timer in manager.transition_timers.values():
@@ -360,8 +360,8 @@ def create_transition_events(
     return all_events
 
 
-async def test_adaptive_lighting_switches(hass):
-    """Test switches created for adaptive_lighting integration."""
+async def test_natural_show_switches(hass):
+    """Test switches created for natural_show integration."""
     entry, switch = await setup_switch(hass, {})
 
     assert len(hass.states.async_entity_ids(SWITCH_DOMAIN)) == 4
@@ -399,14 +399,14 @@ def async_process_ha_core_config(hass, config):
 
 
 @pytest.mark.parametrize(("lat", "long", "timezone"), LAT_LONG_TZS)
-async def test_adaptive_lighting_time_zones_with_default_settings(
+async def test_natural_show_time_zones_with_default_settings(
     hass,
     lat,
     long,
     timezone,
     reset_time_zone,  # pylint: disable=redefined-outer-name
 ):
-    """Test setting up the Adaptive Lighting switches with different timezones."""
+    """Test setting up the Natural Show switches with different timezones."""
     await async_process_ha_core_config(
         hass,
         {"latitude": lat, "longitude": long, "time_zone": timezone, "country": "US"},
@@ -419,14 +419,14 @@ async def test_adaptive_lighting_time_zones_with_default_settings(
 
 
 @pytest.mark.parametrize(("lat", "long", "timezone"), LAT_LONG_TZS)
-async def test_adaptive_lighting_time_zones_and_sun_settings(
+async def test_natural_show_time_zones_and_sun_settings(
     hass,
     lat,
     long,
     timezone,
     reset_time_zone,  # pylint: disable=redefined-outer-name
 ):
-    """Test setting up the Adaptive Lighting switches with different timezones.
+    """Test setting up the Natural Show switches with different timezones.
 
     Also test the (sleep) brightness and color temperature settings.
     """
@@ -455,7 +455,7 @@ async def test_adaptive_lighting_time_zones_and_sun_settings(
 
     async def patch_time_and_update(time):
         with patch(
-            "homeassistant.components.adaptive_lighting.color_and_brightness.utcnow",
+            "homeassistant.components.natural_show.color_and_brightness.utcnow",
             return_value=time,
         ):
             await switch._update_attrs_and_maybe_adapt_lights(context=context)
@@ -547,7 +547,7 @@ async def test_light_settings(hass):
 
     async def patch_time_and_get_updated_states(time):
         with patch(
-            "homeassistant.components.adaptive_lighting.color_and_brightness.utcnow",
+            "homeassistant.components.natural_show.color_and_brightness.utcnow",
             return_value=time,
         ):
             await switch._update_attrs_and_maybe_adapt_lights(
@@ -605,7 +605,7 @@ async def test_light_settings(hass):
 
 
 async def test_manager_not_tracking_untracked_lights(hass):
-    """Test that lights that are not in a Adaptive Lighting switch aren't tracked."""
+    """Test that lights that are not in a Natural Show switch aren't tracked."""
     switch, _ = await setup_lights_and_switch(hass)
     light = ENTITY_LIGHT_3
     assert light not in switch.lights
@@ -704,7 +704,7 @@ async def test_manual_control(
     await turn_light(True, brightness=increased_brightness())
     # Check that ENTITY_LIGHT_1 is manually controlled
     assert manual_control[ENTITY_LIGHT_1] == LightControlAttributes.BRIGHTNESS
-    # Test adaptive_lighting.set_manual_control
+    # Test natural_show.set_manual_control
     await change_manual_control(False)
     # Check that ENTITY_LIGHT_1 is not manually controlled
     assert not manual_control[ENTITY_LIGHT_1]
@@ -810,7 +810,7 @@ async def test_manual_control(
     await change_manual_control(False, {})
     assert all(not manual_control[eid] for eid in switch.lights)
 
-    # Turn off light and turn on using adaptive_lighting.apply
+    # Turn off light and turn on using natural_show.apply
     await turn_light(False)
     await hass.services.async_call(
         DOMAIN,
@@ -1036,7 +1036,7 @@ async def test_adaptation_attribute_selection(hass):
 
 
 async def test_apply_service(hass):
-    """Test adaptive_lighting.apply service."""
+    """Test natural_show.apply service."""
     switch, (_, _, light) = await setup_lights_and_switch(hass)
     entity_id = light.entity_id
     assert entity_id not in switch.lights
@@ -1190,7 +1190,7 @@ def test_attributes_have_changed():
         )
     # Test color mode switches - feature added to detect external changes
     # (e.g., when Hue scenes change light from color_temp to RGB mode)
-    # See: https://github.com/basnijholt/adaptive-lighting/issues/1275
+    # See: https://github.com/Ctrlable/natural-show/issues/1275
     #
     # All mode switches are now detected bidirectionally by checking original
     # attributes BEFORE conversion in _has_color_mode_changed().
@@ -1225,7 +1225,7 @@ def test_attributes_have_changed():
 
 
 async def test_state_change_handlers(hass):
-    """Test AdaptiveLightingManager's EVENT_STATE_CHANGED listener.
+    """Test NaturalShowManager's EVENT_STATE_CHANGED listener.
     ======================
     Sequence of events:
     1. Transition from sleep mode to normal.
@@ -1249,7 +1249,7 @@ async def test_state_change_handlers(hass):
             {ATTR_BRIGHTNESS: val, ATTR_SUPPORTED_FEATURES: 1},
         )
         await hass.async_block_till_done()
-        # Call code in AdaptiveLightingManager
+        # Call code in NaturalShowManager
         hass.bus.async_fire(
             EVENT_STATE_CHANGED,
             {
@@ -1355,7 +1355,7 @@ async def test_state_change_handlers(hass):
             current=current_service_data[light],
             total_events=total_events,
         )
-        # 3. Fire simulated events for our AdaptiveLightingManager
+        # 3. Fire simulated events for our NaturalShowManager
         for event in events:
             _LOGGER.debug("Test EVENT_STATE_CHANGED listener")
             hass.bus.async_fire(EVENT_STATE_CHANGED, event)
@@ -1443,7 +1443,7 @@ def test_is_our_context():
 
 
 async def test_unload_switch(hass):
-    """Test removing Adaptive Lighting."""
+    """Test removing Natural Show."""
     entry, _ = await setup_switch(hass, {})
     assert await hass.config_entries.async_unload(entry.entry_id)
     await hass.async_block_till_done()
@@ -1647,7 +1647,7 @@ async def test_light_switch_in_specific_area(hass):
 
 
 async def test_change_switch_settings_service(hass):
-    """Test adaptive_lighting.change_switch_settings service."""
+    """Test natural_show.change_switch_settings service."""
     switch, (_, _, light) = await setup_lights_and_switch(hass)
     entity_id = light.entity_id
     assert entity_id not in switch.lights
@@ -2155,7 +2155,7 @@ async def test_two_switches_for_single_light(hass):
 
 
 async def test_adapt_until_sleep_and_rgb_colors(hass):
-    """Test setting up the Adaptive Lighting switches with different timezones.
+    """Test setting up the Natural Show switches with different timezones.
 
     Also test the (sleep) brightness and color temperature settings.
     """
@@ -2186,7 +2186,7 @@ async def test_adapt_until_sleep_and_rgb_colors(hass):
 
     async def patch_time_and_update(time):
         with patch(
-            "homeassistant.components.adaptive_lighting.color_and_brightness.utcnow",
+            "homeassistant.components.natural_show.color_and_brightness.utcnow",
             return_value=time,
         ):
             await switch._update_attrs_and_maybe_adapt_lights(context=context)
@@ -2446,7 +2446,7 @@ async def test_brightness_mode(hass, brightness_mode, dark, light):
 
     async def patch_time_and_update(time):
         with patch(
-            "homeassistant.components.adaptive_lighting.color_and_brightness.utcnow",
+            "homeassistant.components.natural_show.color_and_brightness.utcnow",
             return_value=time,
         ):
             await switch._update_attrs_and_maybe_adapt_lights(context=context)
@@ -2482,7 +2482,7 @@ async def test_brightness_mode(hass, brightness_mode, dark, light):
 async def test_simple_switch_initial_state_not_none(hass):
     """Test that SimpleSwitch._state is not None after __init__.
 
-    Regression test for https://github.com/basnijholt/adaptive-lighting/issues/1264
+    Regression test for https://github.com/Ctrlable/natural-show/issues/1264
 
     When an entity is disabled in Home Assistant, async_added_to_hass() is never
     called. Previously, SimpleSwitch._state was initialized to None and only set
@@ -2555,7 +2555,7 @@ async def test_simple_switch_state_after_async_added_to_hass(hass):
 def test_attributes_have_changed_light_mode_switch():
     """Test detection of external light mode changes (color_temp vs rgb vs xy).
 
-    Regression test for https://github.com/basnijholt/adaptive-lighting/issues/1275
+    Regression test for https://github.com/Ctrlable/natural-show/issues/1275
 
     When a user activates a Hue Scene (or similar) via an external app, the light
     may switch from color_temp mode to RGB/XY mode (or vice versa). This should be
@@ -2634,7 +2634,7 @@ def test_attributes_have_changed_light_mode_switch():
 
 
 # Regression tests for bugs found in PR #1348 by @protyposis
-# See: https://github.com/basnijholt/adaptive-lighting/pull/1348
+# See: https://github.com/Ctrlable/natural-show/pull/1348
 
 
 async def test_multi_light_intercept_prepares_adaptation_for_first_entity(hass):
@@ -2658,7 +2658,7 @@ async def test_multi_light_intercept_prepares_adaptation_for_first_entity(hass):
     The adaptation data should be prepared for the first entity in the list since
     that's the one whose service call is being intercepted and modified.
 
-    See: https://github.com/basnijholt/adaptive-lighting/pull/1348
+    See: https://github.com/Ctrlable/natural-show/pull/1348
     """
     switch, _ = await setup_lights_and_switch(hass, {CONF_INTERCEPT: True}, True)
 
@@ -2720,10 +2720,10 @@ async def test_skipped_lights_context_not_from_arbitrary_switch(hass):
     using `switch.create_context("skipped")` where `switch` was from the last
     iteration of a for-loop, which had no relationship to the skipped lights.
 
-    The fix uses `self.create_context("skipped")` on the AdaptiveLightingManager
+    The fix uses `self.create_context("skipped")` on the NaturalShowManager
     instead, which uses "manager" as the context name.
 
-    See: https://github.com/basnijholt/adaptive-lighting/pull/1348
+    See: https://github.com/Ctrlable/natural-show/pull/1348
     """
     # Setup two switches with different lights
     lights, switch1, switch2 = await setup_proactive_multiple_lights_two_switches(hass)
@@ -2777,10 +2777,10 @@ async def test_skipped_lights_context_not_from_arbitrary_switch(hass):
 async def test_automation_turn_on_from_off_not_marked_as_manual_control(hass):
     """Test that turning on a light from OFF via automation is not marked as manual control.
 
-    Regression test for https://github.com/basnijholt/adaptive-lighting/issues/1378
+    Regression test for https://github.com/Ctrlable/natural-show/issues/1378
 
     When an automation turns on a light from OFF state with brightness/color attributes,
-    the light should NOT be marked as manually controlled. Adaptive Lighting should
+    the light should NOT be marked as manually controlled. Natural Show should
     adapt the light normally.
 
     The bug in v1.30.0 was that `update_manually_controlled_from_event` was called for
@@ -2979,7 +2979,7 @@ async def test_detect_non_ha_changes_with_separate_turn_on_commands(hass):
         light.async_write_ha_state()
 
     with patch(
-        "homeassistant.components.adaptive_lighting.switch.async_update_entity",
+        "homeassistant.components.natural_show.switch.async_update_entity",
         new=AsyncMock(side_effect=_flush_attr_state),
     ):
         await update(force=False)

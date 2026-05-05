@@ -9,9 +9,9 @@ import yaml
 
 sys.path.append(str(Path(__file__).parent.parent))
 
-from custom_components.adaptive_lighting import const
+from custom_components.natural_show import const
 
-folder = Path("custom_components") / "adaptive_lighting"
+folder = Path("custom_components") / "natural_show"
 strings_fname = folder / "strings.json"
 en_fname = folder / "translations" / "en.json"
 with strings_fname.open() as f:
@@ -31,7 +31,7 @@ strings["options"]["step"]["init"]["data"] = data
 strings["options"]["step"]["init"]["data_description"] = data_description
 
 # Set "services"
-services_filename = Path("custom_components") / "adaptive_lighting" / "services.yaml"
+services_filename = Path("custom_components") / "natural_show" / "services.yaml"
 with open(services_filename) as f:  # noqa: PTH123
     services = yaml.safe_load(f)
 services_json = {}

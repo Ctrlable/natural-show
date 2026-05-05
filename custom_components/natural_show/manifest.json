@@ -1,0 +1,12 @@
+{
+  "domain": "natural_show",
+  "name": "Natural Show",
+  "codeowners": ["@basnijholt", "@RubenKelevra", "@th3w1zard1", "@protyposis"],
+  "config_flow": true,
+  "dependencies": ["light"],
+  "documentation": "https://github.com/Ctrlable/natural-show#readme",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/Ctrlable/natural-show/issues",
+  "requirements": ["ulid-transform"],
+  "version": "1.30.1"
+}

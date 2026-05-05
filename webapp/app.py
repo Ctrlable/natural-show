@@ -37,7 +37,7 @@ def copy_color_and_brightness_module() -> None:
         module = (
             webapp_folder.parent
             / "custom_components"
-            / "adaptive_lighting"
+            / "natural_show"
             / "color_and_brightness.py"
         )
         new_module = webapp_folder / module.name
@@ -196,28 +196,28 @@ def plot_color_temp(inputs: dict[str, Any], sleep_mode: bool) -> plt.Figure:
 
 SEC_PER_HR = 60 * 60
 desc_top = """
-**Experience the Dynamics of [Adaptive Lighting](https://github.com/basnijholt/adaptive-lighting) in Real-Time.**
+**Experience the Dynamics of [Natural Show](https://github.com/Ctrlable/natural-show) in Real-Time.**
 
-Have you ever wondered how the intricate settings of [Adaptive Lighting](https://github.com/basnijholt/adaptive-lighting) impact your home ambiance? The Adaptive Lighting Simulator WebApp is here to demystify just that.
+Have you ever wondered how the intricate settings of [Natural Show](https://github.com/Ctrlable/natural-show) impact your home ambiance? The Natural Show Simulator WebApp is here to demystify just that.
 
 (More text below the plots)
 """
 
 desc_bottom = """
-Harnessing the technology of the popular Adaptive Lighting integration for Home Assistant, this webapp provides a hands-on, visual platform to explore, tweak, and understand the myriad of parameters that dictate the behavior of your smart lights. Whether you're aiming for a subtle morning glow or a cozy evening warmth, observe firsthand how each tweak changes the ambiance.
+Harnessing the technology of the popular Natural Show integration for Home Assistant, this webapp provides a hands-on, visual platform to explore, tweak, and understand the myriad of parameters that dictate the behavior of your smart lights. Whether you're aiming for a subtle morning glow or a cozy evening warmth, observe firsthand how each tweak changes the ambiance.
 
 **Why Use the Simulator?**
 - **Interactive Exploration**: No more guesswork. See in real-time how changes to settings influence the lighting dynamics.
-- **Circadian Cycle Preview**: Understand how Adaptive Lighting adjusts throughout the day based on specific parameters, ensuring your lighting aligns with your circadian rhythms.
+- **Circadian Cycle Preview**: Understand how Natural Show adjusts throughout the day based on specific parameters, ensuring your lighting aligns with your circadian rhythms.
 - **Tailored Testing**: Play with parameters and find the perfect combination that suits your personal or family's needs.
-- **Educational Experience**: For both newbies and experts, delve deep into the intricacies of Adaptive Lighting's logic and potential.
+- **Educational Experience**: For both newbies and experts, delve deep into the intricacies of Natural Show's logic and potential.
 
-Dive into the simulator, experiment with different settings, and fine-tune the behavior of Adaptive Lighting to perfection. Whether you're setting it up for the first time or optimizing an existing setup, this tool ensures you get the most out of your smart lighting experience.
+Dive into the simulator, experiment with different settings, and fine-tune the behavior of Natural Show to perfection. Whether you're setting it up for the first time or optimizing an existing setup, this tool ensures you get the most out of your smart lighting experience.
 """
 
 # Shiny UI
 app_ui = ui.page_fluid(
-    ui.panel_title("🌞 Adaptive Lighting Simulator WebApp 🌛"),
+    ui.panel_title("🌞 Natural Show Simulator WebApp 🌛"),
     ui.layout_sidebar(
         ui.sidebar(
             ui.input_switch("adapt_until_sleep", "adapt_until_sleep", value=False),
@@ -300,7 +300,7 @@ def time_to_float(time: dt.time | dt.datetime) -> float:
 def _kw(input):
     location = Location(LocationInfo(timezone=dt.timezone.utc))
     return {
-        "name": "Adaptive Lighting Simulator",
+        "name": "Natural Show Simulator",
         "adapt_until_sleep": input.adapt_until_sleep(),
         "max_brightness": input.max_brightness(),
         "min_brightness": input.min_brightness(),

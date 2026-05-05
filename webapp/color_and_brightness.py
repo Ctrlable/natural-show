@@ -1,4 +1,4 @@
-"""Switch for the Adaptive Lighting integration."""
+"""Switch for the Natural Show integration."""
 
 from __future__ import annotations
 
@@ -147,7 +147,7 @@ class SunEvents:
         if events_names not in _ALLOWED_ORDERS:
             msg = (
                 f"{self.name}: The sun events {events_names} are not in the expected"
-                " order. The Adaptive Lighting integration will not work!"
+                " order. The Natural Show integration will not work!"
                 " This might happen if your sunrise/sunset offset is too large or"
                 " your manually set sunrise/sunset time is past/before noon/midnight."
             )
@@ -343,7 +343,7 @@ class SunLightSettings:
             and sun_position < 0
         ):
             # Feature requested in
-            # https://github.com/basnijholt/adaptive-lighting/issues/624
+            # https://github.com/Ctrlable/natural-show/issues/624
             # This will result in a perceptible jump in color at sunset and sunrise
             # because the `color_temperature_to_rgb` function is not 100% accurate.
             min_color_rgb = color_temperature_to_rgb(self.min_color_temp)

@@ -1,14 +1,14 @@
-# Adaptive Lighting Documentation Site Configuration
+# Natural Show Documentation Site Configuration
 # Built with Zensical - https://zensical.org
 
 [project]
-site_name = "Adaptive Lighting"
+site_name = "Natural Show"
 site_description = "Automatically adjust brightness and color of lights based on the sun position"
 site_author = "Bas Nijholt"
-site_url = "https://adaptive-lighting.nijho.lt/"
+site_url = "https://natural-show.nijho.lt/"
 copyright = "Copyright &copy; 2020-2026 Bas Nijholt"
 
-repo_url = "https://github.com/basnijholt/adaptive-lighting"
+repo_url = "https://github.com/basnijholt/natural-show"
 repo_name = "GitHub"
 edit_uri = "edit/main/docs"
 
@@ -89,7 +89,7 @@ provider = "custom"
 
 [[project.extra.social]]
 icon = "fontawesome/brands/github"
-link = "https://github.com/basnijholt/adaptive-lighting"
+link = "https://github.com/basnijholt/natural-show"
 
 [[project.extra.social]]
 icon = "fontawesome/brands/discord"

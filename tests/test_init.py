@@ -1,7 +1,7 @@
-"""Tests for Adaptive Lighting integration."""
+"""Tests for Natural Show integration."""
 
-from homeassistant.components import adaptive_lighting
-from homeassistant.components.adaptive_lighting.const import (
+from homeassistant.components import natural_show
+from homeassistant.components.natural_show.const import (
     DEFAULT_NAME,
     UNDO_UPDATE_LISTENER,
 )
@@ -15,18 +15,18 @@ from tests.common import MockConfigEntry
 async def test_setup_with_config(hass):
     """Test that we import the config and setup the integration."""
     config = {
-        adaptive_lighting.DOMAIN: {
-            adaptive_lighting.CONF_NAME: DEFAULT_NAME,
+        natural_show.DOMAIN: {
+            natural_show.CONF_NAME: DEFAULT_NAME,
         },
     }
-    assert await async_setup_component(hass, adaptive_lighting.DOMAIN, config)
-    assert adaptive_lighting.DOMAIN in hass.data
+    assert await async_setup_component(hass, natural_show.DOMAIN, config)
+    assert natural_show.DOMAIN in hass.data
 
 
 async def test_successful_config_entry(hass):
-    """Test that Adaptive Lighting is configured successfully."""
+    """Test that Natural Show is configured successfully."""
     entry = MockConfigEntry(
-        domain=adaptive_lighting.DOMAIN,
+        domain=natural_show.DOMAIN,
         data={CONF_NAME: DEFAULT_NAME},
     )
     entry.add_to_hass(hass)
@@ -35,13 +35,13 @@ async def test_successful_config_entry(hass):
 
     assert entry.state == ConfigEntryState.LOADED
 
-    assert UNDO_UPDATE_LISTENER in hass.data[adaptive_lighting.DOMAIN][entry.entry_id]
+    assert UNDO_UPDATE_LISTENER in hass.data[natural_show.DOMAIN][entry.entry_id]
 
 
 async def test_unload_entry(hass):
-    """Test removing Adaptive Lighting."""
+    """Test removing Natural Show."""
     entry = MockConfigEntry(
-        domain=adaptive_lighting.DOMAIN,
+        domain=natural_show.DOMAIN,
         data={CONF_NAME: DEFAULT_NAME},
     )
     entry.add_to_hass(hass)
@@ -52,4 +52,4 @@ async def test_unload_entry(hass):
     await hass.async_block_till_done()
 
     assert entry.state == ConfigEntryState.NOT_LOADED
-    assert adaptive_lighting.DOMAIN not in hass.data
+    assert natural_show.DOMAIN not in hass.data

@@ -1,1 +1,1 @@
-"""Tests for the Adaptive Lighting integration."""
+"""Tests for the Natural Show integration."""

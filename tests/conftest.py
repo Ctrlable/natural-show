@@ -1,4 +1,4 @@
-"""Pytest configuration for adaptive-lighting tests."""
+"""Pytest configuration for natural-show tests."""
 
 from unittest.mock import patch
 
@@ -10,7 +10,7 @@ def mock_template_deprecation_issue():
     """Mock the template deprecation issue creation.
 
     The template component's legacy platform syntax creates deprecation
-    issues that require translations. Since adaptive-lighting tests use
+    issues that require translations. Since natural-show tests use
     template lights as test fixtures (not testing the template integration
     itself), we mock the issue creation to avoid translation validation errors.
     """

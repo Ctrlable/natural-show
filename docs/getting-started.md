@@ -4,7 +4,7 @@ icon: lucide/rocket
 
 # Getting Started
 
-This guide will help you install and configure Adaptive Lighting for the first time.
+This guide will help you install and configure Natural Show for the first time.
 
 ## Prerequisites
 
@@ -18,18 +18,18 @@ This guide will help you install and configure Adaptive Lighting for the first t
 1. Open HACS in your Home Assistant instance
 2. Click on **Integrations**
 3. Click the **+ Explore & Download Repositories** button
-4. Search for "Adaptive Lighting"
+4. Search for "Natural Show"
 5. Click **Download**
 6. Restart Home Assistant
 
 Or use this button to open HACS directly:
 
-[![Open your Home Assistant instance and open the Adaptive Lighting integration inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=basnijholt&repository=adaptive-lighting&category=integration)
+[![Open your Home Assistant instance and open the Natural Show integration inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=basnijholt&repository=natural-show&category=integration)
 
 ### Manual Installation
 
-1. Download the latest release from [GitHub](https://github.com/basnijholt/adaptive-lighting/releases)
-2. Extract the `adaptive_lighting` folder to your `config/custom_components/` directory
+1. Download the latest release from [GitHub](https://github.com/Ctrlable/natural-show/releases)
+2. Extract the `natural_show` folder to your `config/custom_components/` directory
 3. Restart Home Assistant
 
 ## Configuration
@@ -39,7 +39,7 @@ Or use this button to open HACS directly:
 Add the following to your `configuration.yaml`:
 
 ```yaml
-adaptive_lighting:
+natural_show:
 ```
 
 > [!NOTE]
@@ -53,23 +53,23 @@ Restart Home Assistant for the changes to take effect.
 
 1. Go to **Settings** → **Devices & Services**
 2. Click **+ Add Integration**
-3. Search for "Adaptive Lighting"
+3. Search for "Natural Show"
 4. Follow the setup wizard to select your lights
 
 ### Step 4: Configure Your Lights
 
-You can configure Adaptive Lighting in two ways:
+You can configure Natural Show in two ways:
 
 === "Via UI"
 
     1. Go to **Settings** → **Devices & Services**
-    2. Find Adaptive Lighting and click **Configure**
+    2. Find Natural Show and click **Configure**
     3. Adjust settings as needed
 
 === "Via YAML"
 
     ```yaml
-    adaptive_lighting:
+    natural_show:
       - name: "Living Room"
         lights:
           - light.living_room_ceiling
@@ -85,7 +85,7 @@ You can configure Adaptive Lighting in two ways:
 Here's a simple configuration to get you started:
 
 ```yaml
-adaptive_lighting:
+natural_show:
   - name: "Main Lights"
     lights:
       - light.living_room
@@ -102,12 +102,12 @@ adaptive_lighting:
 
 After configuration, you should see new switches in Home Assistant:
 
-- `switch.adaptive_lighting_main_lights`
-- `switch.adaptive_lighting_sleep_mode_main_lights`
-- `switch.adaptive_lighting_adapt_brightness_main_lights`
-- `switch.adaptive_lighting_adapt_color_main_lights`
+- `switch.natural_show_main_lights`
+- `switch.natural_show_sleep_mode_main_lights`
+- `switch.natural_show_adapt_brightness_main_lights`
+- `switch.natural_show_adapt_color_main_lights`
 
-Turn on `switch.adaptive_lighting_main_lights` to start adapting your lights!
+Turn on `switch.natural_show_main_lights` to start adapting your lights!
 
 ## Next Steps
 

@@ -1,0 +1,19 @@
+{
+  "title": "Natural Show",
+  "options": {
+    "step": {
+      "init": {
+        "title": "Επιλογές Natural Show"
+      }
+    }
+  },
+  "services": {
+    "change_switch_settings": {
+      "fields": {
+        "only_once": {
+          "description": "Προσαρμογή των φώτων μόνο όταν είναι αναμμένα (`true`) ή συνεχής προσαρμογή αυτών (`false`). 🔄"
+        }
+      }
+    }
+  }
+}

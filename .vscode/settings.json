@@ -15,7 +15,7 @@
         "console_output_style=count",
         "-p",
         "no:sugar",
-        "core/tests/components/adaptive_lighting"
+        "core/tests/components/natural_show"
     ],
     "python.analysis.extraPaths": [
         "${workspaceFolder}/core"

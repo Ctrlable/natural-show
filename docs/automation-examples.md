@@ -4,10 +4,10 @@ icon: lucide/bot
 
 # Automation Examples
 
-Real-world automation examples showing how to integrate Adaptive Lighting with your Home Assistant setup.
+Real-world automation examples showing how to integrate Natural Show with your Home Assistant setup.
 
 <!-- CODE:START -->
-<!-- from adaptive_lighting.docs_gen import _transform_readme_links -->
+<!-- from natural_show.docs_gen import _transform_readme_links -->
 <!-- print(_transform_readme_links(include_section("../README.md", "automation-examples", strip_heading=True))) -->
 <!-- CODE:END -->
 <!-- OUTPUT:START -->
@@ -20,7 +20,7 @@ Real-world automation examples showing how to integrate Adaptive Lighting with y
   mode: parallel
   trigger:
     platform: event
-    event_type: adaptive_lighting.manual_control
+    event_type: natural_show.manual_control
   variables:
     light: "{{ trigger.event.data.entity_id }}"
     switch: "{{ trigger.event.data.switch }}"
@@ -28,7 +28,7 @@ Real-world automation examples showing how to integrate Adaptive Lighting with y
     - delay: "01:00:00"
     - condition: template
       value_template: "{{ light in state_attr(switch, 'manual_control') }}"
-    - service: adaptive_lighting.set_manual_control
+    - service: natural_show.set_manual_control
       data:
         entity_id: "{{ switch }}"
         lights: "{{ light }}"
@@ -38,7 +38,7 @@ Real-world automation examples showing how to integrate Adaptive Lighting with y
 </details>
 
 <details markdown="1">
-<summary>Toggle multiple Adaptive Lighting switches to "sleep mode" using an <code>input_boolean.sleep_mode</code>.</summary>
+<summary>Toggle multiple Natural Show switches to "sleep mode" using an <code>input_boolean.sleep_mode</code>.</summary>
 
 ```yaml
 - alias: "Adaptive lighting: toggle 'sleep mode'"
@@ -52,8 +52,8 @@ Real-world automation examples showing how to integrate Adaptive Lighting with y
   action:
     service: "switch.turn_{{ sleep_mode }}"
     entity_id:
-      - switch.adaptive_lighting_sleep_mode_living_room
-      - switch.adaptive_lighting_sleep_mode_bedroom
+      - switch.natural_show_sleep_mode_living_room
+      - switch.natural_show_sleep_mode_bedroom
 ```
 
 Set your sunrise and sunset time based on your alarm. The below script sets sunset_time exactly 12 hours after the custom sunrise time.
@@ -77,14 +77,14 @@ iphone_carly_wakeup:
         count: >
           {{ (states.switch
               | map(attribute="entity_id")
-              | select(">","switch.adaptive_lighting_al_")
-              | select("<", "switch.adaptive_lighting_al_z")
+              | select(">","switch.natural_show_al_")
+              | select("<", "switch.natural_show_al_z")
               | join(",")
              ).split(",") | length }}
         sequence:
-          - service: adaptive_lighting.change_switch_settings
+          - service: natural_show.change_switch_settings
             data:
-              entity_id: switch.adaptive_lighting_al_den_ceilingfan_lights
+              entity_id: switch.natural_show_al_den_ceilingfan_lights
               sunrise_time: '{{ now().strftime("%H:%M:%S") }}'
               sunset_time: >
                 {{ (as_timestamp(now()) + 12*60*60) | timestamp_custom("%H:%M:%S") }}
@@ -101,7 +101,7 @@ iphone_carly_wakeup:
         entity_id: input_datetime.wakeup_time
       data:
         time: '{{ now().strftime("%H:%M:%S") }}'
-    - service: script.adaptive_lighting_disable_sleep_mode
+    - service: script.natural_show_disable_sleep_mode
   mode: queued
   icon: mdi:weather-sunset
   max: 10
@@ -112,4 +112,4 @@ iphone_carly_wakeup:
 <!-- OUTPUT:END -->
 
 > [!TIP]
-> **Have a useful automation?** Share your automation examples by [opening an issue](https://github.com/basnijholt/adaptive-lighting/issues) or submitting a pull request to the README.
+> **Have a useful automation?** Share your automation examples by [opening an issue](https://github.com/Ctrlable/natural-show/issues) or submitting a pull request to the README.

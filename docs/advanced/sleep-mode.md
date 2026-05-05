@@ -8,10 +8,10 @@ Sleep mode is a special operating mode that sets your lights to minimal brightne
 
 ## Activating Sleep Mode
 
-Each Adaptive Lighting configuration creates a sleep mode switch:
+Each Natural Show configuration creates a sleep mode switch:
 
 ```
-switch.adaptive_lighting_sleep_mode_<name>
+switch.natural_show_sleep_mode_<name>
 ```
 
 Turn it on to activate sleep mode:
@@ -19,12 +19,12 @@ Turn it on to activate sleep mode:
 ```yaml
 service: switch.turn_on
 target:
-  entity_id: switch.adaptive_lighting_sleep_mode_living_room
+  entity_id: switch.natural_show_sleep_mode_living_room
 ```
 
 ## Configuration Options
 
-Sleep mode is configured through the main Adaptive Lighting configuration. See the [Configuration](../configuration.md) page for the full options table. The sleep-related options are:
+Sleep mode is configured through the main Natural Show configuration. See the [Configuration](../configuration.md) page for the full options table. The sleep-related options are:
 
 | Option | Default | Description |
 |--------|---------|-------------|

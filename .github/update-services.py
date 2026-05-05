@@ -7,9 +7,9 @@ import yaml
 
 sys.path.append(str(Path(__file__).parent.parent))
 
-from custom_components.adaptive_lighting import const
+from custom_components.natural_show import const
 
-services_filename = Path("custom_components") / "adaptive_lighting" / "services.yaml"
+services_filename = Path("custom_components") / "natural_show" / "services.yaml"
 with open(services_filename) as f:  # noqa: PTH123
     services = yaml.safe_load(f)
 
