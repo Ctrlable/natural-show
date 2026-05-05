@@ -3,10 +3,10 @@
   "name": "Natural Show",
   "codeowners": ["@Ctrlable"],
   "config_flow": true,
-  "dependencies": ["light"],
+  "dependencies": ["light", "panel_custom"],
   "documentation": "https://github.com/Ctrlable/natural-show#readme",
   "iot_class": "calculated",
   "issue_tracker": "https://github.com/Ctrlable/natural-show/issues",
   "requirements": ["ulid-transform"],
-  "version": "1.31.0"
+  "version": "1.32.0"
 }

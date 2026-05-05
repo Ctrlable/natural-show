@@ -7,6 +7,7 @@ from typing import Any
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant.components.http import HomeAssistantView
+from homeassistant.components.panel_custom import async_register_panel
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import CONF_SOURCE
 from homeassistant.core import Event, HomeAssistant
@@ -24,10 +25,10 @@ _LOGGER = logging.getLogger(__name__)
 
 PLATFORMS = ["switch"]
 
-# Path to the Lovelace card asset served at /natural_show/www/
-_CARD_URL  = "/natural_show/www"
-_CARD_FILE = Path(__file__).parent / "www" / "natural-show-config-card.js"
-_CARD_REGISTERED = False
+# Static assets directory served at /natural_show/www/
+_WWW_URL  = "/natural_show/www"
+_WWW_DIR  = Path(__file__).parent / "www"
+_REGISTERED = False
 
 
 def _all_unique_names(value: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -63,7 +64,12 @@ class NaturalShowConfigView(HomeAssistantView):
     requires_auth = True
 
     async def put(self, request, entry_id: str):
-        """Handle PUT — update lights for one config entry."""
+        """Handle PUT — update options for one config entry.
+
+        Accepts either:
+          { "options": { ...full options dict... } }   ← panel saves all settings
+          { "lights": [...] }                          ← legacy lights-only update
+        """
         hass: HomeAssistant = request.app["hass"]
         entry = hass.config_entries.async_get_entry(entry_id)
         if entry is None or entry.domain != DOMAIN:
@@ -74,14 +80,19 @@ class NaturalShowConfigView(HomeAssistantView):
         except Exception:
             return self.json_message("Invalid JSON body", status_code=400)
 
-        lights = body.get("lights")
-        if not isinstance(lights, list):
-            return self.json_message("'lights' must be a list", status_code=400)
+        if "options" in body:
+            new_options = {**entry.options, **body["options"]}
+        elif "lights" in body:
+            lights = body["lights"]
+            if not isinstance(lights, list):
+                return self.json_message("'lights' must be a list", status_code=400)
+            new_options = {**entry.options, CONF_LIGHTS: lights}
+        else:
+            return self.json_message("Body must contain 'options' or 'lights'", status_code=400)
 
-        new_options = {**entry.options, CONF_LIGHTS: lights}
         hass.config_entries.async_update_entry(entry, options=new_options)
         await hass.config_entries.async_reload(entry_id)
-        return self.json({"success": True, "entry_id": entry_id, "lights": lights})
+        return self.json({"success": True, "entry_id": entry_id})
 
     async def get(self, request, entry_id: str):
         """Handle GET — return current options for one config entry."""
@@ -103,18 +114,27 @@ async def reload_configuration_yaml(event: Event) -> None:
 
 async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
     """Set up global resources once and import entries from config."""
-    global _CARD_REGISTERED  # noqa: PLW0603
-    if not _CARD_REGISTERED:
-        _CARD_REGISTERED = True
-        # Serve the Lovelace card JS from /natural_show/www/
-        if _CARD_FILE.parent.exists():
-            hass.http.register_static_path(_CARD_URL, str(_CARD_FILE.parent), cache_headers=False)
-        # Register the REST view for persistent light-list updates
+    global _REGISTERED  # noqa: PLW0603
+    if not _REGISTERED:
+        _REGISTERED = True
+        # Serve the www/ directory (Lovelace card + config panel)
+        if _WWW_DIR.exists():
+            hass.http.register_static_path(_WWW_URL, str(_WWW_DIR), cache_headers=False)
+        # Register REST view used by the panel to persist options
         hass.http.register_view(NaturalShowConfigView)
-        _LOGGER.debug(
-            "Natural Show: card served at %s/natural-show-config-card.js",
-            _CARD_URL,
+        # Register the full-page configuration panel at /natural-show
+        async_register_panel(
+            hass,
+            frontend_url_path="natural-show",
+            webcomponent_name="natural-show-panel",
+            sidebar_title="Natural Show",
+            sidebar_icon="mdi:theme-light-dark",
+            module_url=f"{_WWW_URL}/natural-show-panel.js",
+            require_admin=False,
+            embed_iframe=False,
+            trust_external=False,
         )
+        _LOGGER.debug("Natural Show: panel registered at /natural-show")
 
     if DOMAIN in config:
         for entry in config[DOMAIN]:

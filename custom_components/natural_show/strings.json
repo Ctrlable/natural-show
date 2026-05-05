@@ -23,8 +23,8 @@
   "options": {
     "step": {
       "init": {
-        "title": "Natural Show — YAML configured",
-        "description": "This entry is configured via YAML. Edit your configuration.yaml to change settings. For interactive graphs, visit [the simulator]({webapp_url}). For documentation, see the [official docs]({docs_url})."
+        "title": "Configure Natural Show",
+        "description": "Open the [Natural Show configuration panel]({panel_url}) to configure **{entry_name}** with the interactive circadian simulator, area/room light selection tree, and all settings.\n\nAfter saving in the panel, click **Submit** here to confirm."
       },
       "lights": {
         "title": "Select Lights",
