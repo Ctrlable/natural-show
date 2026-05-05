@@ -25,6 +25,50 @@ OPTIONS_FLOW_DESCRIPTION_PLACEHOLDERS = {
     "docs_url": "https://github.com/Ctrlable/natural-show#readme",
 }
 
+_CIRCADIAN_CONF = {
+    "min_brightness",
+    "max_brightness",
+    "min_color_temp",
+    "max_color_temp",
+    "prefer_rgb_color",
+    "sleep_brightness",
+    "sleep_rgb_or_color_temp",
+    "sleep_color_temp",
+    "sleep_rgb_color",
+    "sleep_transition",
+    "transition_until_sleep",
+    "sunrise_time",
+    "min_sunrise_time",
+    "max_sunrise_time",
+    "sunrise_offset",
+    "sunset_time",
+    "min_sunset_time",
+    "max_sunset_time",
+    "sunset_offset",
+    "brightness_mode",
+    "brightness_mode_time_dark",
+    "brightness_mode_time_light",
+}
+
+_ADVANCED_CONF = {
+    "interval",
+    "transition",
+    "initial_transition",
+    "take_over_control",
+    "take_over_control_mode",
+    "detect_non_ha_changes",
+    "autoreset_control_seconds",
+    "only_once",
+    "adapt_only_on_bare_turn_on",
+    "separate_turn_on_commands",
+    "send_split_delay",
+    "adapt_delay",
+    "skip_redundant_commands",
+    "intercept",
+    "multi_light_intercept",
+    "include_config_in_attributes",
+}
+
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Natural Show."""
@@ -114,7 +158,6 @@ def validate_options(user_input: dict[str, Any], errors: dict[str, str]) -> None
     in `EXTRA_VALIDATION` cannot be serialized to json.
     """
     for key, (_validate, _) in EXTRA_VALIDATION.items():
-        # these are unserializable validators
         value = user_input.get(key)
         try:
             if value is not None and value != NONE_STR:
@@ -125,53 +168,100 @@ def validate_options(user_input: dict[str, Any], errors: dict[str, str]) -> None
 
 
 class OptionsFlowHandler(config_entries.OptionsFlow):
-    """Handle a option flow for Natural Show."""
+    """Handle a 3-step options flow for Natural Show."""
+
+    def __init__(self) -> None:
+        """Initialize options flow."""
+        self._options: dict[str, Any] = {}
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None):
-        """Handle options flow."""
+        """Redirect to the lights step, or show a notice for YAML-configured entries."""
         conf = self.config_entry
-        data = validate(conf)
         if conf.source == config_entries.SOURCE_IMPORT:
             return self.async_show_form(
                 step_id="init",
                 data_schema=None,
                 description_placeholders=OPTIONS_FLOW_DESCRIPTION_PLACEHOLDERS,
             )
-        errors: dict[str, str] = {}
-        if user_input is not None:
-            validate_options(user_input, errors)
-            if not errors:
-                return self.async_create_entry(title="", data=user_input)
+        return await self.async_step_lights()
 
-        # Validate that all configured lights still exist
+    async def async_step_lights(self, user_input: dict[str, Any] | None = None):
+        """Step 1 — Select which lights this instance controls."""
+        errors: dict[str, str] = {}
+        conf = self.config_entry
+
+        if user_input is not None:
+            self._options.update(user_input)
+            return await self.async_step_circadian()
+
+        current_lights: list[str] = conf.options.get(CONF_LIGHTS, [])
+
         all_lights = set(self.hass.states.async_entity_ids("light"))
-        for configured_light in data[CONF_LIGHTS]:
-            if configured_light not in all_lights:
-                errors = {CONF_LIGHTS: "entity_missing"}
+        for light in current_lights:
+            if light not in all_lights:
+                errors[CONF_LIGHTS] = "entity_missing"
                 _LOGGER.error(
                     "%s: light entity %s is configured, but was not found",
-                    data[CONF_NAME],
-                    configured_light,
+                    conf.title,
+                    light,
                 )
 
-        to_replace: dict[str, Any] = {
-            CONF_LIGHTS: EntitySelector(
-                EntitySelectorConfig(
-                    domain="light",
-                    multiple=True,
+        data_schema = vol.Schema(
+            {
+                vol.Optional(CONF_LIGHTS, default=current_lights): EntitySelector(
+                    EntitySelectorConfig(domain="light", multiple=True),
                 ),
-            ),
-        }
-
-        options_schema = {}
-        for name, default, validation in VALIDATION_TUPLES:
-            key = vol.Optional(name, default=conf.options.get(name, default))
-            value = to_replace.get(name, validation)
-            options_schema[key] = value
+            }
+        )
 
         return self.async_show_form(
-            step_id="init",
-            data_schema=vol.Schema(options_schema),
+            step_id="lights",
+            data_schema=data_schema,
             errors=errors,
             description_placeholders=OPTIONS_FLOW_DESCRIPTION_PLACEHOLDERS,
         )
+
+    async def async_step_circadian(self, user_input: dict[str, Any] | None = None):
+        """Step 2 — Configure the circadian program (brightness & color)."""
+        errors: dict[str, str] = {}
+
+        if user_input is not None:
+            validate_options(user_input, errors)
+            if not errors:
+                self._options.update(user_input)
+                return await self.async_step_advanced()
+
+        return self.async_show_form(
+            step_id="circadian",
+            data_schema=self._schema_for(_CIRCADIAN_CONF),
+            errors=errors,
+            description_placeholders=OPTIONS_FLOW_DESCRIPTION_PLACEHOLDERS,
+        )
+
+    async def async_step_advanced(self, user_input: dict[str, Any] | None = None):
+        """Step 3 — Configure advanced behavior settings (final step)."""
+        errors: dict[str, str] = {}
+
+        if user_input is not None:
+            validate_options(user_input, errors)
+            if not errors:
+                self._options.update(user_input)
+                return self.async_create_entry(title="", data=self._options)
+
+        return self.async_show_form(
+            step_id="advanced",
+            data_schema=self._schema_for(_ADVANCED_CONF),
+            errors=errors,
+            description_placeholders=OPTIONS_FLOW_DESCRIPTION_PLACEHOLDERS,
+        )
+
+    def _schema_for(self, names: set[str]) -> vol.Schema:
+        """Build a vol.Schema for the given set of option names."""
+        conf = self.config_entry
+        schema: dict[Any, Any] = {}
+        for name, default, validation in VALIDATION_TUPLES:
+            if name not in names:
+                continue
+            current = self._options.get(name, conf.options.get(name, default))
+            schema[vol.Optional(name, default=current)] = validation
+        return vol.Schema(schema)
