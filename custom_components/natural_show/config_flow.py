@@ -104,10 +104,10 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 
 class OptionsFlowHandler(config_entries.OptionsFlow):
-    """Options flow: opens the full-page configuration panel directly via external step."""
+    """Options flow: shows a link that navigates to the full-page panel in the same window."""
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None):
-        """Open the panel immediately; complete when the panel calls WS configure."""
+        """Show a description with a same-window link to the panel."""
         conf = self.config_entry
 
         if conf.source == config_entries.SOURCE_IMPORT:
@@ -118,15 +118,17 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             )
 
         if user_input is not None:
-            # Panel saved options and called the WS configure endpoint → finish.
-            return self.async_external_step_done(next_step_id="finish")
+            # User clicked Submit (or panel completed the flow via WS) → done.
+            return self.async_create_entry(title="", data=dict(conf.options))
 
-        # Redirect immediately to the full-page panel.
-        return self.async_external_step(
+        # Show a form with a same-origin link.  HA's ha-markdown intercepts
+        # relative links and does an in-SPA navigation — same window, same
+        # session, no re-login required.
+        return self.async_show_form(
             step_id="init",
-            url=f"{_PANEL_URL}?entry_id={conf.entry_id}&flow_id={self.flow_id}",
+            data_schema=vol.Schema({}),
+            description_placeholders={
+                "panel_url": f"{_PANEL_URL}?entry_id={conf.entry_id}&flow_id={self.flow_id}",
+                "entry_name": conf.title,
+            },
         )
-
-    async def async_step_finish(self, user_input: dict[str, Any] | None = None):
-        """Finalise the options flow after the panel saves."""
-        return self.async_create_entry(title="", data=dict(self.config_entry.options))
