@@ -146,7 +146,7 @@ async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
         # Register REST view used by the panel to persist options
         hass.http.register_view(NaturalShowConfigView)
         # Register the full-page configuration panel at /natural-show
-        async_register_panel(
+        await async_register_panel(
             hass,
             frontend_url_path="natural-show",
             webcomponent_name="natural-show-panel",
