@@ -375,10 +375,18 @@ class NaturalShowPanel extends HTMLElement {
   }
 
   async _selectEntry(id) {
-    this._selId   = id;
-    const entry   = this._entries.find(e => e.entry_id === id);
-    if (!entry) return;
-    this._options = { ...DEFAULT_OPTIONS, ...entry.options };
+    this._selId = id;
+    if (!this._entries.find(e => e.entry_id === id)) return;
+
+    // config_entries/get does not include options — fetch from our REST API
+    try {
+      const result = await this._hass.callApi('GET', `natural_show/config/${id}`);
+      this._options = { ...DEFAULT_OPTIONS, ...(result.options || {}) };
+    } catch (e) {
+      console.warn('[NaturalShowPanel] could not load options:', e);
+      this._options = { ...DEFAULT_OPTIONS };
+    }
+
     // normalise 'None' sentinel strings to ''
     for (const k of ['sunrise_time','sunset_time','min_sunrise_time','max_sunrise_time','min_sunset_time','max_sunset_time']) {
       if (!this._options[k] || this._options[k] === 'None') this._options[k] = '';
