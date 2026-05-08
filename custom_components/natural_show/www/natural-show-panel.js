@@ -127,60 +127,57 @@ const DEFAULT_OPTIONS = {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Styles
+// Styles — uses HA CSS custom properties for full theme compatibility
 // ─────────────────────────────────────────────────────────────────────────────
 const CSS = `
   :host {
     display: block;
     height: 100vh;
     overflow-y: auto;
-    background: #0f172a;
-    color: #f1f5f9;
+    background: var(--primary-background-color);
+    color: var(--primary-text-color);
     font-family: var(--primary-font-family, 'Roboto', sans-serif);
-    font-size: 13px;
+    font-size: 14px;
     scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,.15) transparent;
   }
   * { box-sizing: border-box; }
 
   /* ── Header ── */
   .hdr {
     display: flex; align-items: center; gap: 12px;
-    padding: 14px 20px;
-    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
-    border-bottom: 1px solid rgba(255,255,255,.08);
+    padding: 8px 16px;
+    background: var(--card-background-color);
+    border-bottom: 1px solid var(--divider-color);
     flex-wrap: wrap;
     position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
   }
-  .hdr-title { font-size: 18px; font-weight: 700; white-space: nowrap; }
+  .hdr-title { font-size: 18px; font-weight: 500; white-space: nowrap; }
   .hdr-select {
     flex: 1; min-width: 160px; max-width: 320px;
-    background: rgba(255,255,255,.09); color: #f1f5f9;
-    border: 1px solid rgba(255,255,255,.15); border-radius: 7px;
-    padding: 6px 10px; font-size: 13px; cursor: pointer;
+    background: var(--secondary-background-color);
+    color: var(--primary-text-color);
+    border: 1px solid var(--divider-color);
+    border-radius: 4px;
+    padding: 8px 10px; font-size: 14px; cursor: pointer;
+    font-family: var(--primary-font-family, inherit);
   }
-  .hdr-actions { display: flex; gap: 8px; margin-left: auto; }
-  .btn {
-    padding: 8px 18px; border-radius: 7px; border: none;
-    font-size: 13px; font-weight: 600; cursor: pointer;
-    transition: opacity .15s, transform .1s;
+  .hdr-actions { display: flex; gap: 8px; margin-left: auto; align-items: center; }
+  mwc-button {
+    --mdc-theme-primary: var(--primary-color);
+    --mdc-theme-on-primary: var(--text-primary-color, #fff);
   }
-  .btn:hover { opacity: .85; transform: translateY(-1px); }
-  .btn:active { transform: translateY(0); }
-  .btn-back { background: rgba(255,255,255,.1); color: #f1f5f9; }
-  .btn-save { background: linear-gradient(135deg, #0ea5e9, #2563eb); color: #fff; }
-  .btn-save.busy { opacity: .5; cursor: wait; pointer-events: none; }
 
   /* ── Main body ── */
-  .body { padding: 16px 20px 40px; max-width: 1600px; margin: 0 auto; }
+  .body { padding: 16px 16px 40px; max-width: 1600px; margin: 0 auto; }
 
   /* ── Charts ── */
   .charts { margin-bottom: 16px; }
   .chart-label {
-    font-size: 10px; text-transform: uppercase; letter-spacing: .5px;
-    color: rgba(255,255,255,.3); margin-bottom: 4px;
+    font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    color: var(--secondary-text-color); margin-bottom: 4px;
   }
-  canvas { display: block; width: 100%; border-radius: 8px; background: #111827; }
+  canvas { display: block; width: 100%; border-radius: 8px; }
   #cvs-bright { margin-bottom: 8px; }
 
   /* ── Two-column grid ── */
@@ -192,104 +189,103 @@ const CSS = `
   }
   @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
 
-  /* ── Cards ── */
-  .card {
-    background: #1e293b; border-radius: 12px;
-    border: 1px solid rgba(255,255,255,.07);
-    padding: 16px; margin-bottom: 12px;
-  }
-  .card-title {
-    font-size: 13px; font-weight: 700; letter-spacing: .3px;
-    margin: 0 0 14px;
-    display: flex; align-items: center; gap: 6px;
-  }
+  /* ── ha-card ── */
+  ha-card { display: block; margin-bottom: 12px; }
+  ha-card .card-content { padding: 16px; }
 
   /* ── Fields ── */
-  .field { margin-bottom: 13px; }
+  .field { margin-bottom: 14px; }
   .field:last-child { margin-bottom: 0; }
   .field-lbl {
     display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 5px; color: #94a3b8;
+    margin-bottom: 6px; color: var(--secondary-text-color); font-size: 13px;
   }
-  .field-val { color: #38bdf8; font-weight: 600; }
-  input[type=range] { width: 100%; accent-color: #38bdf8; cursor: pointer; height: 4px; }
-  .field-input, select.field-select {
-    width: 100%; padding: 6px 10px;
-    background: rgba(255,255,255,.07); color: #f1f5f9;
-    border: 1px solid rgba(255,255,255,.12); border-radius: 6px;
-    font-size: 13px; cursor: pointer;
+  .field-val { color: var(--primary-color); font-weight: 600; }
+  input[type=range] {
+    width: 100%; accent-color: var(--primary-color); cursor: pointer;
   }
-  .field-input:focus, select.field-select:focus { outline: 1px solid #38bdf8; }
+  ha-textfield { width: 100%; display: block; }
+  select.field-select {
+    width: 100%; padding: 8px 10px;
+    background: var(--secondary-background-color);
+    color: var(--primary-text-color);
+    border: 1px solid var(--divider-color);
+    border-radius: 4px; font-size: 14px; cursor: pointer;
+    font-family: var(--primary-font-family, inherit);
+  }
+  select.field-select:focus { outline: 2px solid var(--primary-color); outline-offset: -2px; }
   .toggle-row {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.04);
-    color: #94a3b8; gap: 8px;
+    padding: 10px 0; border-bottom: 1px solid var(--divider-color);
+    gap: 8px;
   }
   .toggle-row:last-child { border-bottom: none; }
-  input[type=checkbox] { width: 15px; height: 15px; accent-color: #38bdf8; cursor: pointer; flex-shrink: 0; }
-  .field-hint { font-size: 11px; color: rgba(255,255,255,.28); margin-top: 3px; }
+  ha-switch { flex-shrink: 0; }
+  .field-hint {
+    font-size: 12px;
+    color: var(--disabled-text-color, var(--secondary-text-color));
+    margin-top: 4px;
+  }
 
   /* ── Advanced collapsible ── */
   .adv-toggle {
     width: 100%; background: none; border: none;
-    color: #38bdf8; font-size: 13px; font-weight: 600;
+    color: var(--primary-color); font-size: 13px; font-weight: 600;
     text-align: left; padding: 10px 0; cursor: pointer;
     display: flex; align-items: center; gap: 6px;
+    font-family: var(--primary-font-family, inherit);
   }
   .adv-body { display: none; }
   .adv-body.open { display: block; }
 
   /* ── Lights tree ── */
-  .tree {
-    max-height: 560px; overflow-y: auto;
-    scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.1) transparent;
-  }
-  .area-block { border-bottom: 1px solid rgba(255,255,255,.04); }
+  .tree { max-height: 560px; overflow-y: auto; scrollbar-width: thin; }
+  .area-block { border-bottom: 1px solid var(--divider-color); }
   .area-block:last-child { border-bottom: none; }
   .area-head {
     display: flex; align-items: center; gap: 8px;
     padding: 8px 10px; cursor: pointer; user-select: none;
-    transition: background .1s; border-radius: 7px;
+    border-radius: 4px; transition: background .1s;
   }
-  .area-head:hover { background: rgba(255,255,255,.04); }
-  .area-arr { font-size: 9px; color: rgba(255,255,255,.3); width: 10px; }
+  .area-head:hover { background: var(--secondary-background-color); }
+  .area-arr { font-size: 9px; color: var(--disabled-text-color, var(--secondary-text-color)); width: 10px; }
   .area-name { flex: 1; font-weight: 500; }
   .area-badge {
     font-size: 11px; padding: 2px 7px; border-radius: 10px;
-    background: rgba(255,255,255,.07); color: rgba(255,255,255,.3);
+    background: var(--secondary-background-color); color: var(--secondary-text-color);
   }
-  .area-badge.sel { background: rgba(56,189,248,.2); color: #38bdf8; }
+  .area-badge.sel { background: var(--primary-color); color: var(--text-primary-color, #fff); }
   .area-lights { padding: 2px 0 8px 28px; display: none; }
   .area-lights.open { display: block; }
   .sel-all-row {
     display: flex; align-items: center; gap: 8px;
-    padding: 4px 8px; font-size: 11px; color: rgba(255,255,255,.3);
-    cursor: pointer; border-bottom: 1px solid rgba(255,255,255,.04); margin-bottom: 3px;
+    padding: 4px 8px; font-size: 12px; color: var(--secondary-text-color);
+    cursor: pointer; border-bottom: 1px solid var(--divider-color); margin-bottom: 3px;
   }
   .light-row {
     display: flex; align-items: center; gap: 8px;
-    padding: 5px 8px; cursor: pointer; border-radius: 5px;
-    transition: background .1s;
+    padding: 5px 8px; cursor: pointer; border-radius: 4px; transition: background .1s;
   }
-  .light-row:hover { background: rgba(255,255,255,.04); }
+  .light-row:hover { background: var(--secondary-background-color); }
   .light-name { flex: 1; }
-  .light-eid { font-size: 10px; color: rgba(255,255,255,.22); font-family: monospace; }
-  .sel-count { text-align: right; font-size: 11px; color: rgba(255,255,255,.35); margin-top: 10px; }
+  .light-eid { font-size: 11px; color: var(--disabled-text-color, var(--secondary-text-color)); font-family: monospace; }
+  .sel-count { text-align: right; font-size: 12px; color: var(--secondary-text-color); margin-top: 10px; }
+  input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--primary-color); cursor: pointer; flex-shrink: 0; }
 
   /* ── Toast ── */
   .toast {
     position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-    background: #1e293b; border: 1px solid rgba(56,189,248,.4); color: #38bdf8;
+    background: var(--card-background-color);
+    border: 1px solid var(--primary-color); color: var(--primary-color);
     padding: 10px 22px; border-radius: 8px; font-size: 13px; font-weight: 600;
-    z-index: 9999; opacity: 0; pointer-events: none;
-    transition: opacity .3s;
-    white-space: nowrap;
+    z-index: 9999; opacity: 0; pointer-events: none; transition: opacity .3s;
+    white-space: nowrap; box-shadow: var(--ha-card-box-shadow, 0 2px 8px rgba(0,0,0,.2));
   }
   .toast.show { opacity: 1; }
-  .toast.err { border-color: rgba(239,68,68,.5); color: #f87171; }
+  .toast.err { border-color: var(--error-color); color: var(--error-color); }
 
   /* ── Empty state ── */
-  .empty { text-align: center; padding: 60px 20px; color: rgba(255,255,255,.3); font-size: 15px; }
+  .empty { text-align: center; padding: 60px 20px; color: var(--secondary-text-color); font-size: 15px; }
 `;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -378,7 +374,6 @@ class NaturalShowPanel extends HTMLElement {
     this._selId = id;
     if (!this._entries.find(e => e.entry_id === id)) return;
 
-    // config_entries/get does not include options — fetch from our REST API
     try {
       const result = await this._hass.callApi('GET', `natural_show/config/${id}`);
       this._options = { ...DEFAULT_OPTIONS, ...(result.options || {}) };
@@ -387,7 +382,6 @@ class NaturalShowPanel extends HTMLElement {
       this._options = { ...DEFAULT_OPTIONS };
     }
 
-    // normalise 'None' sentinel strings to ''
     for (const k of ['sunrise_time','sunset_time','min_sunrise_time','max_sunrise_time','min_sunset_time','max_sunset_time']) {
       if (!this._options[k] || this._options[k] === 'None') this._options[k] = '';
     }
@@ -409,7 +403,6 @@ class NaturalShowPanel extends HTMLElement {
     this.shadowRoot.innerHTML = `
       <style>${CSS}</style>
 
-      <!-- Header -->
       <div class="hdr">
         <span class="hdr-title">🌞 Natural Show</span>
         <select class="hdr-select" id="inst-sel">
@@ -417,17 +410,15 @@ class NaturalShowPanel extends HTMLElement {
           ${instOpts}
         </select>
         <div class="hdr-actions">
-          <button class="btn btn-back" id="btn-back">← Back</button>
-          <button class="btn btn-save" id="btn-save">💾 Save &amp; Apply</button>
+          <mwc-button id="btn-back" label="Back"></mwc-button>
+          <mwc-button id="btn-save" label="Save &amp; Apply" raised></mwc-button>
         </div>
       </div>
 
-      <!-- Body -->
       <div class="body">
         ${this._entries.length === 0
           ? `<div class="empty">No Natural Show instances found.<br>Add one in <b>Settings → Devices &amp; Services → Add Integration → Natural Show</b>.</div>`
           : `
-            <!-- Charts -->
             <div class="charts">
               <div class="chart-label">Brightness — 24 h preview</div>
               <canvas id="cvs-bright" height="220"></canvas>
@@ -435,7 +426,6 @@ class NaturalShowPanel extends HTMLElement {
               <canvas id="cvs-ct" height="72"></canvas>
             </div>
 
-            <!-- Settings + Lights -->
             <div class="grid">
               <div class="settings-col">
                 ${this._tplBrightness()}
@@ -445,11 +435,12 @@ class NaturalShowPanel extends HTMLElement {
                 ${this._tplAdvanced()}
               </div>
               <div class="lights-col">
-                <div class="card">
-                  <div class="card-title">💡 Lights</div>
-                  <div class="tree" id="tree"></div>
-                  <div class="sel-count" id="sel-count">0 lights selected</div>
-                </div>
+                <ha-card header="💡 Lights">
+                  <div class="card-content">
+                    <div class="tree" id="tree"></div>
+                    <div class="sel-count" id="sel-count">0 lights selected</div>
+                  </div>
+                </ha-card>
               </div>
             </div>
           `
@@ -464,182 +455,182 @@ class NaturalShowPanel extends HTMLElement {
   _tplBrightness() {
     const o = this._options;
     return `
-      <div class="card">
-        <div class="card-title">☀️ Brightness</div>
-        <div class="field">
-          <div class="field-lbl">Minimum <span class="field-val" id="v-min-b">${o.min_brightness}%</span></div>
-          <input type="range" id="min-b" min="1" max="100" value="${o.min_brightness}">
-        </div>
-        <div class="field">
-          <div class="field-lbl">Maximum <span class="field-val" id="v-max-b">${o.max_brightness}%</span></div>
-          <input type="range" id="max-b" min="1" max="100" value="${o.max_brightness}">
-        </div>
-        <div class="field">
-          <div class="field-lbl">Brightness Mode</div>
-          <select class="field-select" id="b-mode">
-            <option value="default" ${o.brightness_mode==='default'?'selected':''}>Default (sun position)</option>
-            <option value="linear"  ${o.brightness_mode==='linear' ?'selected':''}>Linear</option>
-            <option value="tanh"    ${o.brightness_mode==='tanh'   ?'selected':''}>Tanh (smooth S-curve)</option>
-          </select>
-        </div>
-        <div id="ramp-wrap" ${o.brightness_mode==='default'?'style="display:none"':''}>
+      <ha-card header="☀️ Brightness">
+        <div class="card-content">
           <div class="field">
-            <div class="field-lbl">Ramp — Dark (before/after sun event) <span class="field-val" id="v-ramp-d">${this._fmtMin(o.brightness_mode_time_dark)}</span></div>
-            <input type="range" id="ramp-d" min="60" max="18000" step="60" value="${o.brightness_mode_time_dark}">
+            <div class="field-lbl">Minimum <span class="field-val" id="v-min-b">${o.min_brightness}%</span></div>
+            <input type="range" id="min-b" min="1" max="100" value="${o.min_brightness}">
           </div>
           <div class="field">
-            <div class="field-lbl">Ramp — Light (after/before sun event) <span class="field-val" id="v-ramp-l">${this._fmtMin(o.brightness_mode_time_light)}</span></div>
-            <input type="range" id="ramp-l" min="60" max="18000" step="60" value="${o.brightness_mode_time_light}">
+            <div class="field-lbl">Maximum <span class="field-val" id="v-max-b">${o.max_brightness}%</span></div>
+            <input type="range" id="max-b" min="1" max="100" value="${o.max_brightness}">
+          </div>
+          <div class="field">
+            <div class="field-lbl">Brightness Mode</div>
+            <select class="field-select" id="b-mode">
+              <option value="default" ${o.brightness_mode==='default'?'selected':''}>Default (sun position)</option>
+              <option value="linear"  ${o.brightness_mode==='linear' ?'selected':''}>Linear</option>
+              <option value="tanh"    ${o.brightness_mode==='tanh'   ?'selected':''}>Tanh (smooth S-curve)</option>
+            </select>
+          </div>
+          <div id="ramp-wrap" ${o.brightness_mode==='default'?'style="display:none"':''}>
+            <div class="field">
+              <div class="field-lbl">Ramp — Dark (before/after sun event) <span class="field-val" id="v-ramp-d">${this._fmtMin(o.brightness_mode_time_dark)}</span></div>
+              <input type="range" id="ramp-d" min="60" max="18000" step="60" value="${o.brightness_mode_time_dark}">
+            </div>
+            <div class="field">
+              <div class="field-lbl">Ramp — Light (after/before sun event) <span class="field-val" id="v-ramp-l">${this._fmtMin(o.brightness_mode_time_light)}</span></div>
+              <input type="range" id="ramp-l" min="60" max="18000" step="60" value="${o.brightness_mode_time_light}">
+            </div>
           </div>
         </div>
-      </div>`;
+      </ha-card>`;
   }
 
   _tplColorTemp() {
     const o = this._options;
     return `
-      <div class="card">
-        <div class="card-title">🌡️ Color Temperature</div>
-        <div class="field">
-          <div class="field-lbl">Warmest (minimum K) <span class="field-val" id="v-min-ct">${o.min_color_temp} K</span></div>
-          <input type="range" id="min-ct" min="1000" max="6500" step="100" value="${o.min_color_temp}">
+      <ha-card header="🌡️ Color Temperature">
+        <div class="card-content">
+          <div class="field">
+            <div class="field-lbl">Warmest (minimum K) <span class="field-val" id="v-min-ct">${o.min_color_temp} K</span></div>
+            <input type="range" id="min-ct" min="1000" max="6500" step="100" value="${o.min_color_temp}">
+          </div>
+          <div class="field">
+            <div class="field-lbl">Coolest (maximum K) <span class="field-val" id="v-max-ct">${o.max_color_temp} K</span></div>
+            <input type="range" id="max-ct" min="1000" max="10000" step="100" value="${o.max_color_temp}">
+          </div>
+          <div class="toggle-row">
+            <span>Prefer RGB color over color temperature</span>
+            <ha-switch id="pref-rgb" ${o.prefer_rgb_color?'checked':''}></ha-switch>
+          </div>
+          <div class="toggle-row">
+            <span>Transition toward sleep color after sunset</span>
+            <ha-switch id="til-sleep" ${o.transition_until_sleep?'checked':''}></ha-switch>
+          </div>
         </div>
-        <div class="field">
-          <div class="field-lbl">Coolest (maximum K) <span class="field-val" id="v-max-ct">${o.max_color_temp} K</span></div>
-          <input type="range" id="max-ct" min="1000" max="10000" step="100" value="${o.max_color_temp}">
-        </div>
-        <div class="toggle-row">
-          <span>Prefer RGB color over color temperature</span>
-          <input type="checkbox" id="pref-rgb" ${o.prefer_rgb_color?'checked':''}>
-        </div>
-        <div class="toggle-row">
-          <span>Transition toward sleep color after sunset</span>
-          <input type="checkbox" id="til-sleep" ${o.transition_until_sleep?'checked':''}>
-        </div>
-      </div>`;
+      </ha-card>`;
   }
 
   _tplSunriseSunset() {
     const o = this._options;
     return `
-      <div class="card">
-        <div class="card-title">🌅 Sunrise &amp; Sunset</div>
-        <div class="field-hint" style="margin-bottom:10px">Leave blank to use your location's actual sunrise/sunset.</div>
-        <div class="field">
-          <div class="field-lbl">Fixed Sunrise Time (HH:MM:SS)</div>
-          <input class="field-input" type="text" id="sr-time" placeholder="07:00:00" value="${this._e(o.sunrise_time)}">
-        </div>
-        <div class="field">
-          <div class="field-lbl">Sunrise Offset <span class="field-val" id="v-sr-off">${this._fmtSec(o.sunrise_offset)}</span></div>
-          <input type="range" id="sr-off" min="-7200" max="7200" step="60" value="${o.sunrise_offset}">
-          <div class="field-hint">Negative = earlier, positive = later</div>
-        </div>
-        <div class="field">
-          <div class="field-lbl">Fixed Sunset Time (HH:MM:SS)</div>
-          <input class="field-input" type="text" id="ss-time" placeholder="20:00:00" value="${this._e(o.sunset_time)}">
-        </div>
-        <div class="field">
-          <div class="field-lbl">Sunset Offset <span class="field-val" id="v-ss-off">${this._fmtSec(o.sunset_offset)}</span></div>
-          <input type="range" id="ss-off" min="-7200" max="7200" step="60" value="${o.sunset_offset}">
-        </div>
-        <button class="adv-toggle" id="sun-adv-toggle">▶ Min/Max sunrise/sunset times</button>
-        <div class="adv-body" id="sun-adv-body">
+      <ha-card header="🌅 Sunrise &amp; Sunset">
+        <div class="card-content">
+          <div class="field-hint" style="margin-bottom:14px">Leave blank to use your location's actual sunrise/sunset.</div>
           <div class="field">
-            <div class="field-lbl">Earliest Sunrise (HH:MM:SS)</div>
-            <input class="field-input" type="text" id="min-sr" placeholder="06:00:00" value="${this._e(o.min_sunrise_time)}">
+            <ha-textfield id="sr-time" label="Fixed Sunrise Time (HH:MM:SS)" placeholder="07:00:00" value="${this._e(o.sunrise_time)}"></ha-textfield>
           </div>
           <div class="field">
-            <div class="field-lbl">Latest Sunrise (HH:MM:SS)</div>
-            <input class="field-input" type="text" id="max-sr" placeholder="09:00:00" value="${this._e(o.max_sunrise_time)}">
+            <div class="field-lbl">Sunrise Offset <span class="field-val" id="v-sr-off">${this._fmtSec(o.sunrise_offset)}</span></div>
+            <input type="range" id="sr-off" min="-7200" max="7200" step="60" value="${o.sunrise_offset}">
+            <div class="field-hint">Negative = earlier, positive = later</div>
           </div>
           <div class="field">
-            <div class="field-lbl">Earliest Sunset (HH:MM:SS)</div>
-            <input class="field-input" type="text" id="min-ss" placeholder="17:00:00" value="${this._e(o.min_sunset_time)}">
+            <ha-textfield id="ss-time" label="Fixed Sunset Time (HH:MM:SS)" placeholder="20:00:00" value="${this._e(o.sunset_time)}"></ha-textfield>
           </div>
           <div class="field">
-            <div class="field-lbl">Latest Sunset (HH:MM:SS)</div>
-            <input class="field-input" type="text" id="max-ss" placeholder="21:00:00" value="${this._e(o.max_sunset_time)}">
+            <div class="field-lbl">Sunset Offset <span class="field-val" id="v-ss-off">${this._fmtSec(o.sunset_offset)}</span></div>
+            <input type="range" id="ss-off" min="-7200" max="7200" step="60" value="${o.sunset_offset}">
+          </div>
+          <button class="adv-toggle" id="sun-adv-toggle">▶ Min/Max sunrise/sunset times</button>
+          <div class="adv-body" id="sun-adv-body">
+            <div class="field">
+              <ha-textfield id="min-sr" label="Earliest Sunrise (HH:MM:SS)" placeholder="06:00:00" value="${this._e(o.min_sunrise_time)}"></ha-textfield>
+            </div>
+            <div class="field">
+              <ha-textfield id="max-sr" label="Latest Sunrise (HH:MM:SS)" placeholder="09:00:00" value="${this._e(o.max_sunrise_time)}"></ha-textfield>
+            </div>
+            <div class="field">
+              <ha-textfield id="min-ss" label="Earliest Sunset (HH:MM:SS)" placeholder="17:00:00" value="${this._e(o.min_sunset_time)}"></ha-textfield>
+            </div>
+            <div class="field">
+              <ha-textfield id="max-ss" label="Latest Sunset (HH:MM:SS)" placeholder="21:00:00" value="${this._e(o.max_sunset_time)}"></ha-textfield>
+            </div>
           </div>
         </div>
-      </div>`;
+      </ha-card>`;
   }
 
   _tplSleep() {
     const o = this._options;
     return `
-      <div class="card">
-        <div class="card-title">😴 Sleep Mode</div>
-        <div class="field">
-          <div class="field-lbl">Sleep Brightness <span class="field-val" id="v-sl-b">${o.sleep_brightness}%</span></div>
-          <input type="range" id="sl-b" min="1" max="100" value="${o.sleep_brightness}">
+      <ha-card header="😴 Sleep Mode">
+        <div class="card-content">
+          <div class="field">
+            <div class="field-lbl">Sleep Brightness <span class="field-val" id="v-sl-b">${o.sleep_brightness}%</span></div>
+            <input type="range" id="sl-b" min="1" max="100" value="${o.sleep_brightness}">
+          </div>
+          <div class="field">
+            <div class="field-lbl">Sleep Color Type</div>
+            <select class="field-select" id="sl-type">
+              <option value="color_temp" ${o.sleep_rgb_or_color_temp==='color_temp'?'selected':''}>Color Temperature</option>
+              <option value="rgb_color"  ${o.sleep_rgb_or_color_temp==='rgb_color' ?'selected':''}>RGB Color</option>
+            </select>
+          </div>
+          <div class="field">
+            <div class="field-lbl">Sleep Color Temperature <span class="field-val" id="v-sl-ct">${o.sleep_color_temp} K</span></div>
+            <input type="range" id="sl-ct" min="1000" max="6500" step="100" value="${o.sleep_color_temp}">
+          </div>
+          <div class="field">
+            <div class="field-lbl">Sleep Transition <span class="field-val" id="v-sl-tr">${o.sleep_transition} s</span></div>
+            <input type="range" id="sl-tr" min="0" max="60" step="1" value="${o.sleep_transition}">
+          </div>
         </div>
-        <div class="field">
-          <div class="field-lbl">Sleep Color Type</div>
-          <select class="field-select" id="sl-type">
-            <option value="color_temp" ${o.sleep_rgb_or_color_temp==='color_temp'?'selected':''}>Color Temperature</option>
-            <option value="rgb_color"  ${o.sleep_rgb_or_color_temp==='rgb_color' ?'selected':''}>RGB Color</option>
-          </select>
-        </div>
-        <div class="field">
-          <div class="field-lbl">Sleep Color Temperature <span class="field-val" id="v-sl-ct">${o.sleep_color_temp} K</span></div>
-          <input type="range" id="sl-ct" min="1000" max="6500" step="100" value="${o.sleep_color_temp}">
-        </div>
-        <div class="field">
-          <div class="field-lbl">Sleep Transition <span class="field-val" id="v-sl-tr">${o.sleep_transition} s</span></div>
-          <input type="range" id="sl-tr" min="0" max="60" step="1" value="${o.sleep_transition}">
-        </div>
-      </div>`;
+      </ha-card>`;
   }
 
   _tplAdvanced() {
     const o = this._options;
     return `
-      <div class="card">
-        <button class="adv-toggle" id="adv-toggle">▶ Advanced Settings</button>
-        <div class="adv-body" id="adv-body">
-          <div class="field">
-            <div class="field-lbl">Adaptation Interval <span class="field-val" id="v-intv">${o.interval} s</span></div>
-            <input type="range" id="intv" min="10" max="600" step="5" value="${o.interval}">
+      <ha-card>
+        <div class="card-content">
+          <button class="adv-toggle" id="adv-toggle">▶ Advanced Settings</button>
+          <div class="adv-body" id="adv-body">
+            <div class="field">
+              <div class="field-lbl">Adaptation Interval <span class="field-val" id="v-intv">${o.interval} s</span></div>
+              <input type="range" id="intv" min="10" max="600" step="5" value="${o.interval}">
+            </div>
+            <div class="field">
+              <div class="field-lbl">Transition Duration <span class="field-val" id="v-trans">${o.transition} s</span></div>
+              <input type="range" id="trans" min="0" max="300" step="1" value="${o.transition}">
+            </div>
+            <div class="field">
+              <div class="field-lbl">Initial Transition <span class="field-val" id="v-init-tr">${o.initial_transition} s</span></div>
+              <input type="range" id="init-tr" min="0" max="60" step="1" value="${o.initial_transition}">
+            </div>
+            <div class="field">
+              <div class="field-lbl">Take Over Control Mode</div>
+              <select class="field-select" id="toc-mode">
+                <option value="pause_all"     ${o.take_over_control_mode==='pause_all'    ?'selected':''}>Pause all attributes</option>
+                <option value="pause_changed" ${o.take_over_control_mode==='pause_changed'?'selected':''}>Pause only changed attribute</option>
+              </select>
+            </div>
+            <div class="field">
+              <div class="field-lbl">Auto-reset control after <span class="field-val" id="v-autoreset">${o.autoreset_control_seconds===0?'disabled':o.autoreset_control_seconds+' s'}</span></div>
+              <input type="range" id="autoreset" min="0" max="7200" step="60" value="${o.autoreset_control_seconds}">
+            </div>
+            <div class="field">
+              <div class="field-lbl">Adapt Delay <span class="field-val" id="v-adel">${o.adapt_delay} s</span></div>
+              <input type="range" id="adel" min="0" max="30" step="0.5" value="${o.adapt_delay}">
+              <div class="field-hint">Wait after turn-on before applying changes (prevents flicker)</div>
+            </div>
+            <div class="field">
+              <div class="field-lbl">Split Command Delay <span class="field-val" id="v-ssdel">${o.send_split_delay} ms</span></div>
+              <input type="range" id="ssdel" min="0" max="5000" step="50" value="${o.send_split_delay}">
+            </div>
+            <div class="toggle-row"><span>Take over control</span><ha-switch id="toc" ${o.take_over_control?'checked':''}></ha-switch></div>
+            <div class="toggle-row"><span>Detect non-HA changes</span><ha-switch id="det-nha" ${o.detect_non_ha_changes?'checked':''}></ha-switch></div>
+            <div class="toggle-row"><span>Only adapt once (on turn-on)</span><ha-switch id="only-once" ${o.only_once?'checked':''}></ha-switch></div>
+            <div class="toggle-row"><span>Adapt only on bare turn-on</span><ha-switch id="bare-ton" ${o.adapt_only_on_bare_turn_on?'checked':''}></ha-switch></div>
+            <div class="toggle-row"><span>Separate turn-on commands</span><ha-switch id="sep-ton" ${o.separate_turn_on_commands?'checked':''}></ha-switch></div>
+            <div class="toggle-row"><span>Skip redundant commands</span><ha-switch id="skip-red" ${o.skip_redundant_commands?'checked':''}></ha-switch></div>
+            <div class="toggle-row"><span>Intercept turn-on calls</span><ha-switch id="intercept" ${o.intercept?'checked':''}></ha-switch></div>
+            <div class="toggle-row"><span>Intercept multi-light turn-on calls</span><ha-switch id="multi-int" ${o.multi_light_intercept?'checked':''}></ha-switch></div>
+            <div class="toggle-row"><span>Include config in attributes</span><ha-switch id="inc-attr" ${o.include_config_in_attributes?'checked':''}></ha-switch></div>
           </div>
-          <div class="field">
-            <div class="field-lbl">Transition Duration <span class="field-val" id="v-trans">${o.transition} s</span></div>
-            <input type="range" id="trans" min="0" max="300" step="1" value="${o.transition}">
-          </div>
-          <div class="field">
-            <div class="field-lbl">Initial Transition <span class="field-val" id="v-init-tr">${o.initial_transition} s</span></div>
-            <input type="range" id="init-tr" min="0" max="60" step="1" value="${o.initial_transition}">
-          </div>
-          <div class="field">
-            <div class="field-lbl">Take Over Control Mode</div>
-            <select class="field-select" id="toc-mode">
-              <option value="pause_all"     ${o.take_over_control_mode==='pause_all'    ?'selected':''}>Pause all attributes</option>
-              <option value="pause_changed" ${o.take_over_control_mode==='pause_changed'?'selected':''}>Pause only changed attribute</option>
-            </select>
-          </div>
-          <div class="field">
-            <div class="field-lbl">Auto-reset control after <span class="field-val" id="v-autoreset">${o.autoreset_control_seconds===0?'disabled':o.autoreset_control_seconds+' s'}</span></div>
-            <input type="range" id="autoreset" min="0" max="7200" step="60" value="${o.autoreset_control_seconds}">
-          </div>
-          <div class="field">
-            <div class="field-lbl">Adapt Delay <span class="field-val" id="v-adel">${o.adapt_delay} s</span></div>
-            <input type="range" id="adel" min="0" max="30" step="0.5" value="${o.adapt_delay}">
-            <div class="field-hint">Wait after turn-on before applying changes (prevents flicker)</div>
-          </div>
-          <div class="field">
-            <div class="field-lbl">Split Command Delay <span class="field-val" id="v-ssdel">${o.send_split_delay} ms</span></div>
-            <input type="range" id="ssdel" min="0" max="5000" step="50" value="${o.send_split_delay}">
-          </div>
-          <div class="toggle-row"><span>Take over control</span><input type="checkbox" id="toc" ${o.take_over_control?'checked':''}></div>
-          <div class="toggle-row"><span>Detect non-HA changes</span><input type="checkbox" id="det-nha" ${o.detect_non_ha_changes?'checked':''}></div>
-          <div class="toggle-row"><span>Only adapt once (on turn-on)</span><input type="checkbox" id="only-once" ${o.only_once?'checked':''}></div>
-          <div class="toggle-row"><span>Adapt only on bare turn-on</span><input type="checkbox" id="bare-ton" ${o.adapt_only_on_bare_turn_on?'checked':''}></div>
-          <div class="toggle-row"><span>Separate turn-on commands</span><input type="checkbox" id="sep-ton" ${o.separate_turn_on_commands?'checked':''}></div>
-          <div class="toggle-row"><span>Skip redundant commands</span><input type="checkbox" id="skip-red" ${o.skip_redundant_commands?'checked':''}></div>
-          <div class="toggle-row"><span>Intercept turn-on calls</span><input type="checkbox" id="intercept" ${o.intercept?'checked':''}></div>
-          <div class="toggle-row"><span>Intercept multi-light turn-on calls</span><input type="checkbox" id="multi-int" ${o.multi_light_intercept?'checked':''}></div>
-          <div class="toggle-row"><span>Include config in attributes</span><input type="checkbox" id="inc-attr" ${o.include_config_in_attributes?'checked':''}></div>
         </div>
-      </div>`;
+      </ha-card>`;
   }
 
   // ── Tree ───────────────────────────────────────────────────────────────────
@@ -684,7 +675,6 @@ class NaturalShowPanel extends HTMLElement {
         </div>`;
     }).join('');
 
-    // Indeterminate state (requires JS)
     tree.querySelectorAll('.sel-all').forEach(cb => {
       const b = this._areaLights[cb.dataset.area];
       if (!b) return;
@@ -747,6 +737,12 @@ class NaturalShowPanel extends HTMLElement {
     if (el) el.textContent = `${this._selLights.size} light${this._selLights.size !== 1 ? 's' : ''} selected`;
   }
 
+  // ── Theme helpers ──────────────────────────────────────────────────────────
+
+  _themeColor(varName, fallback) {
+    return getComputedStyle(this).getPropertyValue(varName).trim() || fallback;
+  }
+
   // ── Charts ─────────────────────────────────────────────────────────────────
 
   _simParams() {
@@ -797,7 +793,11 @@ class NaturalShowPanel extends HTMLElement {
     const cW  = W - pad.l - pad.r;
     const cH  = H - pad.t - pad.b;
 
-    ctx.fillStyle = '#111827'; ctx.fillRect(0, 0, W, H);
+    const chartBg  = this._themeColor('--card-background-color', '#1e293b');
+    const gridCol  = this._themeColor('--divider-color', 'rgba(255,255,255,.08)');
+    const labelCol = this._themeColor('--secondary-text-color', '#9ca3af');
+
+    ctx.fillStyle = chartBg; ctx.fillRect(0, 0, W, H);
 
     // Sky gradient background
     const sky = ctx.createLinearGradient(pad.l, 0, pad.l + cW, 0);
@@ -816,7 +816,7 @@ class NaturalShowPanel extends HTMLElement {
     ctx.globalAlpha = 1;
 
     // Grid
-    ctx.strokeStyle = 'rgba(255,255,255,.08)'; ctx.lineWidth = 1;
+    ctx.strokeStyle = gridCol; ctx.lineWidth = 1;
     for (let b = 0; b <= 100; b += 25) {
       const y = pad.t + cH - (b / 100) * cH;
       ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + cW, y); ctx.stroke();
@@ -854,17 +854,16 @@ class NaturalShowPanel extends HTMLElement {
       }
       ctx.stroke();
       ctx.globalAlpha = 1;
-      // Legend
       const lx = pad.l + 8 + idx * 90, ly = pad.t + 12;
       ctx.strokeStyle = color; ctx.lineWidth = active ? 2.5 : 1.2; ctx.globalAlpha = active ? 1 : 0.35;
       ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx + 18, ly); ctx.stroke();
-      ctx.globalAlpha = 1; ctx.fillStyle = active ? color : '#6b7280';
+      ctx.globalAlpha = 1; ctx.fillStyle = active ? color : labelCol;
       ctx.font = active ? 'bold 10px sans-serif' : '10px sans-serif'; ctx.textAlign = 'left';
       ctx.fillText(label, lx + 22, ly + 4);
     });
 
     // Y axis
-    ctx.fillStyle = '#9ca3af'; ctx.font = '11px sans-serif'; ctx.textAlign = 'right';
+    ctx.fillStyle = labelCol; ctx.font = '11px sans-serif'; ctx.textAlign = 'right';
     for (let b = 0; b <= 100; b += 25) ctx.fillText(`${b}%`, pad.l - 6, pad.t + cH - (b/100)*cH + 4);
     // X axis
     ctx.textAlign = 'center';
@@ -884,10 +883,12 @@ class NaturalShowPanel extends HTMLElement {
     const cW  = W - pad.l - pad.r;
     const cH  = H - pad.t - pad.b;
 
-    ctx.fillStyle = '#111827'; ctx.fillRect(0, 0, W, H);
+    const chartBg  = this._themeColor('--card-background-color', '#1e293b');
+    const labelCol = this._themeColor('--secondary-text-color', '#9ca3af');
+
+    ctx.fillStyle = chartBg; ctx.fillRect(0, 0, W, H);
 
     const img = ctx.createImageData(Math.ceil(cW * DPR), Math.ceil(cH * DPR));
-    // Iterate in logical pixels, but write DPR*DPR blocks
     for (let i = 0; i < Math.ceil(cW); i++) {
       const h = (i / cW) * 24;
       const [r, g, b] = colorTempToRGB(colorTempAtHour(h, p));
@@ -904,8 +905,8 @@ class NaturalShowPanel extends HTMLElement {
     ctx.putImageData(img, pad.l * DPR, pad.t * DPR);
 
     // Frame
-    ctx.strokeStyle = 'rgba(255,255,255,.15)'; ctx.lineWidth = 1;
-    ctx.strokeRect(pad.l, pad.t, cW, cH);
+    ctx.strokeStyle = this._themeColor('--divider-color', 'rgba(255,255,255,.15)');
+    ctx.lineWidth = 1; ctx.strokeRect(pad.l, pad.t, cW, cH);
 
     // Sun markers
     [[p.sunriseH, '#f59e0b'], [p.sunsetH, '#ef4444']].forEach(([h, c]) => {
@@ -923,7 +924,7 @@ class NaturalShowPanel extends HTMLElement {
     ctx.fillStyle = `rgb(${rx},${gx},${bx})`; ctx.textAlign = 'right'; ctx.fillText(`${p.maxColorTemp}K`, W-2, pad.t + cH/2 + 4);
 
     // X axis
-    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
+    ctx.fillStyle = labelCol; ctx.textAlign = 'center';
     for (let h = 0; h <= 24; h += 4) ctx.fillText(`${h}h`, pad.l+(h/24)*cW, pad.t+cH+14);
   }
 
@@ -941,7 +942,6 @@ class NaturalShowPanel extends HTMLElement {
       if (e.target.value) this._selectEntry(e.target.value);
     });
 
-    // Collapsibles
     const mkCollapse = (toggleId, bodyId) => {
       sr.getElementById(toggleId)?.addEventListener('click', () => {
         const body = sr.getElementById(bodyId);
@@ -954,14 +954,12 @@ class NaturalShowPanel extends HTMLElement {
     mkCollapse('adv-toggle', 'adv-body');
     mkCollapse('sun-adv-toggle', 'sun-adv-body');
 
-    // Brightness mode → show/hide ramp fields
     sr.getElementById('b-mode')?.addEventListener('change', e => {
       const wrap = sr.getElementById('ramp-wrap');
       if (wrap) wrap.style.display = e.target.value === 'default' ? 'none' : '';
       this._scheduleDraw();
     });
 
-    // All sliders & selects → update charts live
     const sliders = ['min-b','max-b','ramp-d','ramp-l','min-ct','max-ct','sl-b','sl-ct','sr-off','ss-off'];
     sliders.forEach(id => {
       const el = sr.getElementById(id);
@@ -980,15 +978,12 @@ class NaturalShowPanel extends HTMLElement {
       });
     });
 
-    // Text time inputs
     ['sr-time','ss-time'].forEach(id => {
       sr.getElementById(id)?.addEventListener('input', () => this._scheduleDraw());
     });
 
-    // Toggle for adaptUntilSleep affects CT chart
     sr.getElementById('til-sleep')?.addEventListener('change', () => this._scheduleDraw());
 
-    // Advanced sliders
     [['intv','v-intv',v=>v+' s'],['trans','v-trans',v=>v+' s'],['init-tr','v-init-tr',v=>v+' s'],
      ['autoreset','v-autoreset',v=>+v===0?'disabled':v+' s'],
      ['adel','v-adel',v=>v+' s'],['ssdel','v-ssdel',v=>v+' ms']].forEach(([id, lbl, fmt]) => {
@@ -1105,13 +1100,12 @@ class NaturalShowPanel extends HTMLElement {
     if (this._saving || !this._selId) return;
     this._saving = true;
     const btn = this.shadowRoot.getElementById('btn-save');
-    if (btn) { btn.textContent = '⏳ Saving…'; btn.classList.add('busy'); }
+    if (btn) { btn.setAttribute('label', 'Saving…'); btn.disabled = true; }
 
     try {
       this._readForm();
       await this._hass.callApi('PUT', `natural_show/config/${this._selId}`, { options: this._options });
       this._toast('✅ Saved and applied!');
-      // If launched from options flow, complete it
       const flowId = new URLSearchParams(window.location.search).get('flow_id');
       if (flowId) {
         try {
@@ -1123,7 +1117,7 @@ class NaturalShowPanel extends HTMLElement {
       this._toast('❌ ' + (err.message || 'Save failed'), true);
     } finally {
       this._saving = false;
-      if (btn) { btn.textContent = '💾 Save & Apply'; btn.classList.remove('busy'); }
+      if (btn) { btn.setAttribute('label', 'Save & Apply'); btn.disabled = false; }
     }
   }
 
